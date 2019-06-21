@@ -1,0 +1,30 @@
+****************************
+*     Run app as Local     *
+****************************
+
+STATING SEVER:
+listen on 127.1.1.1:80
+
+   ErrorException  : Object of class Illuminate\Foundation\Bus\PendingDispatch could not be converted to string
+
+  at /mnt/storage/home/riveram/Projects/customers/anthonio/alterhome/api/vendor/laravel/framework/src/Illuminate/Console/Command.php:443
+    439|      * @return void
+    440|      */
+    441|     public function line($string, $style = null, $verbosity = null)
+    442|     {
+  > 443|         $styled = $style ? "<$style>$string</$style>" : $string;
+    444| 
+    445|         $this->output->writeln($styled, $this->parseVerbosity($verbosity));
+    446|     }
+    447|
+
+  Exception trace:
+
+  1   Illuminate\Foundation\Bootstrap\HandleExceptions::handleError("Object of class Illuminate\Foundation\Bus\PendingDispatch could not be converted to string", "/mnt/storage/home/riveram/Projects/customers/anthonio/alterhome/api/vendor/laravel/framework/src/Illuminate/Console/Command.php", [Object(Illuminate\Foundation\Bus\PendingDispatch), "info"])
+      /mnt/storage/home/riveram/Projects/customers/anthonio/alterhome/api/vendor/laravel/framework/src/Illuminate/Console/Command.php:443
+
+  2   Illuminate\Console\Command::line(Object(Illuminate\Foundation\Bus\PendingDispatch), "info")
+      /mnt/storage/home/riveram/Projects/customers/anthonio/alterhome/api/vendor/laravel/framework/src/Illuminate/Console/Command.php:430
+
+  Please use the argument -v to see more details.
+[Sun Aug  5 23:09:36 2018] Failed to listen on 127.1.1.1:80 (reason: Permiso denegado)
