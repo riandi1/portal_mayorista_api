@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.39 on 2019-06-10 22:44:08.
+ * Generated for Laravel 5.6.39 on 2019-06-25 16:30:00.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -3727,108 +3727,6 @@ namespace Illuminate\Support\Facades {
     /**
      * 
      *
-     * @see \Illuminate\Encryption\Encrypter
-     */ 
-    class Crypt {
-        
-        /**
-         * Determine if the given key and cipher combination is valid.
-         *
-         * @param string $key
-         * @param string $cipher
-         * @return bool 
-         * @static 
-         */ 
-        public static function supported($key, $cipher)
-        {
-                        return \Illuminate\Encryption\Encrypter::supported($key, $cipher);
-        }
-        
-        /**
-         * Create a new encryption key for the given cipher.
-         *
-         * @param string $cipher
-         * @return string 
-         * @static 
-         */ 
-        public static function generateKey($cipher)
-        {
-                        return \Illuminate\Encryption\Encrypter::generateKey($cipher);
-        }
-        
-        /**
-         * Encrypt the given value.
-         *
-         * @param mixed $value
-         * @param bool $serialize
-         * @return string 
-         * @throws \Illuminate\Contracts\Encryption\EncryptException
-         * @static 
-         */ 
-        public static function encrypt($value, $serialize = true)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->encrypt($value, $serialize);
-        }
-        
-        /**
-         * Encrypt a string without serialization.
-         *
-         * @param string $value
-         * @return string 
-         * @static 
-         */ 
-        public static function encryptString($value)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->encryptString($value);
-        }
-        
-        /**
-         * Decrypt the given value.
-         *
-         * @param mixed $payload
-         * @param bool $unserialize
-         * @return mixed 
-         * @throws \Illuminate\Contracts\Encryption\DecryptException
-         * @static 
-         */ 
-        public static function decrypt($payload, $unserialize = true)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->decrypt($payload, $unserialize);
-        }
-        
-        /**
-         * Decrypt the given string without unserialization.
-         *
-         * @param string $payload
-         * @return string 
-         * @static 
-         */ 
-        public static function decryptString($payload)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->decryptString($payload);
-        }
-        
-        /**
-         * Get the encryption key.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getKey()
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->getKey();
-        }
-         
-    }
-
-    /**
-     * 
-     *
      * @see \Illuminate\Database\DatabaseManager
      * @see \Illuminate\Database\Connection
      */ 
@@ -3964,13 +3862,27 @@ namespace Illuminate\Support\Facades {
         /**
          * Get a schema builder instance for the connection.
          *
-         * @return \Illuminate\Database\Schema\PostgresBuilder 
+         * @return \Illuminate\Database\Schema\MySqlBuilder 
          * @static 
          */ 
         public static function getSchemaBuilder()
         {
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getSchemaBuilder();
+        }
+        
+        /**
+         * Bind values to their parameters in the given statement.
+         *
+         * @param \PDOStatement $statement
+         * @param array $bindings
+         * @return void 
+         * @static 
+         */ 
+        public static function bindValues($statement, $bindings)
+        {
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        $instance->bindValues($statement, $bindings);
         }
         
         /**
@@ -3982,7 +3894,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultQueryGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultQueryGrammar();
         }
         
@@ -3995,7 +3907,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultSchemaGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultSchemaGrammar();
         }
         
@@ -4008,7 +3920,7 @@ namespace Illuminate\Support\Facades {
         public static function useDefaultPostProcessor()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->useDefaultPostProcessor();
         }
         
@@ -4022,7 +3934,7 @@ namespace Illuminate\Support\Facades {
         public static function table($table)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->table($table);
         }
         
@@ -4035,7 +3947,7 @@ namespace Illuminate\Support\Facades {
         public static function query()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->query();
         }
         
@@ -4051,7 +3963,7 @@ namespace Illuminate\Support\Facades {
         public static function selectOne($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->selectOne($query, $bindings, $useReadPdo);
         }
         
@@ -4066,7 +3978,7 @@ namespace Illuminate\Support\Facades {
         public static function selectFromWriteConnection($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->selectFromWriteConnection($query, $bindings);
         }
         
@@ -4082,7 +3994,7 @@ namespace Illuminate\Support\Facades {
         public static function select($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->select($query, $bindings, $useReadPdo);
         }
         
@@ -4098,7 +4010,7 @@ namespace Illuminate\Support\Facades {
         public static function cursor($query, $bindings = array(), $useReadPdo = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->cursor($query, $bindings, $useReadPdo);
         }
         
@@ -4113,7 +4025,7 @@ namespace Illuminate\Support\Facades {
         public static function insert($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->insert($query, $bindings);
         }
         
@@ -4128,7 +4040,7 @@ namespace Illuminate\Support\Facades {
         public static function update($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->update($query, $bindings);
         }
         
@@ -4143,7 +4055,7 @@ namespace Illuminate\Support\Facades {
         public static function delete($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->delete($query, $bindings);
         }
         
@@ -4158,7 +4070,7 @@ namespace Illuminate\Support\Facades {
         public static function statement($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->statement($query, $bindings);
         }
         
@@ -4173,7 +4085,7 @@ namespace Illuminate\Support\Facades {
         public static function affectingStatement($query, $bindings = array())
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->affectingStatement($query, $bindings);
         }
         
@@ -4187,7 +4099,7 @@ namespace Illuminate\Support\Facades {
         public static function unprepared($query)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->unprepared($query);
         }
         
@@ -4201,23 +4113,8 @@ namespace Illuminate\Support\Facades {
         public static function pretend($callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->pretend($callback);
-        }
-        
-        /**
-         * Bind values to their parameters in the given statement.
-         *
-         * @param \PDOStatement $statement
-         * @param array $bindings
-         * @return void 
-         * @static 
-         */ 
-        public static function bindValues($statement, $bindings)
-        {
-            //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
-                        $instance->bindValues($statement, $bindings);
         }
         
         /**
@@ -4230,7 +4127,7 @@ namespace Illuminate\Support\Facades {
         public static function prepareBindings($bindings)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->prepareBindings($bindings);
         }
         
@@ -4246,7 +4143,7 @@ namespace Illuminate\Support\Facades {
         public static function logQuery($query, $bindings, $time = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->logQuery($query, $bindings, $time);
         }
         
@@ -4260,7 +4157,7 @@ namespace Illuminate\Support\Facades {
         public static function listen($callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->listen($callback);
         }
         
@@ -4274,7 +4171,7 @@ namespace Illuminate\Support\Facades {
         public static function raw($value)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->raw($value);
         }
         
@@ -4288,7 +4185,7 @@ namespace Illuminate\Support\Facades {
         public static function recordsHaveBeenModified($value = true)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->recordsHaveBeenModified($value);
         }
         
@@ -4301,7 +4198,7 @@ namespace Illuminate\Support\Facades {
         public static function isDoctrineAvailable()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->isDoctrineAvailable();
         }
         
@@ -4316,7 +4213,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineColumn($table, $column)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineColumn($table, $column);
         }
         
@@ -4329,7 +4226,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineSchemaManager()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineSchemaManager();
         }
         
@@ -4342,7 +4239,7 @@ namespace Illuminate\Support\Facades {
         public static function getDoctrineConnection()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDoctrineConnection();
         }
         
@@ -4355,7 +4252,7 @@ namespace Illuminate\Support\Facades {
         public static function getPdo()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getPdo();
         }
         
@@ -4368,7 +4265,7 @@ namespace Illuminate\Support\Facades {
         public static function getReadPdo()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getReadPdo();
         }
         
@@ -4376,13 +4273,13 @@ namespace Illuminate\Support\Facades {
          * Set the PDO connection.
          *
          * @param \PDO|\Closure|null $pdo
-         * @return \Illuminate\Database\PostgresConnection 
+         * @return \Illuminate\Database\MySqlConnection 
          * @static 
          */ 
         public static function setPdo($pdo)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setPdo($pdo);
         }
         
@@ -4390,13 +4287,13 @@ namespace Illuminate\Support\Facades {
          * Set the PDO connection used for reading.
          *
          * @param \PDO|\Closure|null $pdo
-         * @return \Illuminate\Database\PostgresConnection 
+         * @return \Illuminate\Database\MySqlConnection 
          * @static 
          */ 
         public static function setReadPdo($pdo)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setReadPdo($pdo);
         }
         
@@ -4404,13 +4301,13 @@ namespace Illuminate\Support\Facades {
          * Set the reconnect instance on the connection.
          *
          * @param callable $reconnector
-         * @return \Illuminate\Database\PostgresConnection 
+         * @return \Illuminate\Database\MySqlConnection 
          * @static 
          */ 
         public static function setReconnector($reconnector)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setReconnector($reconnector);
         }
         
@@ -4423,7 +4320,7 @@ namespace Illuminate\Support\Facades {
         public static function getName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getName();
         }
         
@@ -4437,7 +4334,7 @@ namespace Illuminate\Support\Facades {
         public static function getConfig($option = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getConfig($option);
         }
         
@@ -4450,7 +4347,7 @@ namespace Illuminate\Support\Facades {
         public static function getDriverName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDriverName();
         }
         
@@ -4463,7 +4360,7 @@ namespace Illuminate\Support\Facades {
         public static function getQueryGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getQueryGrammar();
         }
         
@@ -4477,7 +4374,7 @@ namespace Illuminate\Support\Facades {
         public static function setQueryGrammar($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->setQueryGrammar($grammar);
         }
         
@@ -4490,7 +4387,7 @@ namespace Illuminate\Support\Facades {
         public static function getSchemaGrammar()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getSchemaGrammar();
         }
         
@@ -4504,7 +4401,7 @@ namespace Illuminate\Support\Facades {
         public static function setSchemaGrammar($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->setSchemaGrammar($grammar);
         }
         
@@ -4517,7 +4414,7 @@ namespace Illuminate\Support\Facades {
         public static function getPostProcessor()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getPostProcessor();
         }
         
@@ -4531,7 +4428,7 @@ namespace Illuminate\Support\Facades {
         public static function setPostProcessor($processor)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->setPostProcessor($processor);
         }
         
@@ -4544,7 +4441,7 @@ namespace Illuminate\Support\Facades {
         public static function getEventDispatcher()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getEventDispatcher();
         }
         
@@ -4558,7 +4455,7 @@ namespace Illuminate\Support\Facades {
         public static function setEventDispatcher($events)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->setEventDispatcher($events);
         }
         
@@ -4571,7 +4468,7 @@ namespace Illuminate\Support\Facades {
         public static function unsetEventDispatcher()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->unsetEventDispatcher();
         }
         
@@ -4584,7 +4481,7 @@ namespace Illuminate\Support\Facades {
         public static function pretending()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->pretending();
         }
         
@@ -4597,7 +4494,7 @@ namespace Illuminate\Support\Facades {
         public static function getQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getQueryLog();
         }
         
@@ -4610,7 +4507,7 @@ namespace Illuminate\Support\Facades {
         public static function flushQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->flushQueryLog();
         }
         
@@ -4623,7 +4520,7 @@ namespace Illuminate\Support\Facades {
         public static function enableQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->enableQueryLog();
         }
         
@@ -4636,7 +4533,7 @@ namespace Illuminate\Support\Facades {
         public static function disableQueryLog()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->disableQueryLog();
         }
         
@@ -4649,7 +4546,7 @@ namespace Illuminate\Support\Facades {
         public static function logging()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->logging();
         }
         
@@ -4662,7 +4559,7 @@ namespace Illuminate\Support\Facades {
         public static function getDatabaseName()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getDatabaseName();
         }
         
@@ -4676,7 +4573,7 @@ namespace Illuminate\Support\Facades {
         public static function setDatabaseName($database)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->setDatabaseName($database);
         }
         
@@ -4689,7 +4586,7 @@ namespace Illuminate\Support\Facades {
         public static function getTablePrefix()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->getTablePrefix();
         }
         
@@ -4703,7 +4600,7 @@ namespace Illuminate\Support\Facades {
         public static function setTablePrefix($prefix)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->setTablePrefix($prefix);
         }
         
@@ -4717,7 +4614,7 @@ namespace Illuminate\Support\Facades {
         public static function withTablePrefix($grammar)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->withTablePrefix($grammar);
         }
         
@@ -4732,7 +4629,7 @@ namespace Illuminate\Support\Facades {
         public static function resolverFor($driver, $callback)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        \Illuminate\Database\PostgresConnection::resolverFor($driver, $callback);
+                        \Illuminate\Database\MySqlConnection::resolverFor($driver, $callback);
         }
         
         /**
@@ -4745,7 +4642,7 @@ namespace Illuminate\Support\Facades {
         public static function getResolver($driver)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        return \Illuminate\Database\PostgresConnection::getResolver($driver);
+                        return \Illuminate\Database\MySqlConnection::getResolver($driver);
         }
         
         /**
@@ -4760,7 +4657,7 @@ namespace Illuminate\Support\Facades {
         public static function transaction($callback, $attempts = 1)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->transaction($callback, $attempts);
         }
         
@@ -4774,7 +4671,7 @@ namespace Illuminate\Support\Facades {
         public static function beginTransaction()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->beginTransaction();
         }
         
@@ -4787,7 +4684,7 @@ namespace Illuminate\Support\Facades {
         public static function commit()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->commit();
         }
         
@@ -4802,7 +4699,7 @@ namespace Illuminate\Support\Facades {
         public static function rollBack($toLevel = null)
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         $instance->rollBack($toLevel);
         }
         
@@ -4815,7 +4712,7 @@ namespace Illuminate\Support\Facades {
         public static function transactionLevel()
         {
             //Method inherited from \Illuminate\Database\Connection            
-                        /** @var \Illuminate\Database\PostgresConnection $instance */
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
                         return $instance->transactionLevel();
         }
          
@@ -11215,32 +11112,8 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function hasTable($table)
         {
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasTable($table);
-        }
-        
-        /**
-         * Drop all tables from the database.
-         *
-         * @return void 
-         * @static 
-         */ 
-        public static function dropAllTables()
-        {
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
-                        $instance->dropAllTables();
-        }
-        
-        /**
-         * Drop all views from the database.
-         *
-         * @return void 
-         * @static 
-         */ 
-        public static function dropAllViews()
-        {
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
-                        $instance->dropAllViews();
         }
         
         /**
@@ -11252,8 +11125,32 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getColumnListing($table)
         {
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getColumnListing($table);
+        }
+        
+        /**
+         * Drop all tables from the database.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function dropAllTables()
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        $instance->dropAllTables();
+        }
+        
+        /**
+         * Drop all views from the database.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function dropAllViews()
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        $instance->dropAllViews();
         }
         
         /**
@@ -11266,7 +11163,7 @@ namespace Illuminate\Support\Facades {
         public static function defaultStringLength($length)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        \Illuminate\Database\Schema\PostgresBuilder::defaultStringLength($length);
+                        \Illuminate\Database\Schema\MySqlBuilder::defaultStringLength($length);
         }
         
         /**
@@ -11280,7 +11177,7 @@ namespace Illuminate\Support\Facades {
         public static function hasColumn($table, $column)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasColumn($table, $column);
         }
         
@@ -11295,7 +11192,7 @@ namespace Illuminate\Support\Facades {
         public static function hasColumns($table, $columns)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->hasColumns($table, $columns);
         }
         
@@ -11310,7 +11207,7 @@ namespace Illuminate\Support\Facades {
         public static function getColumnType($table, $column)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getColumnType($table, $column);
         }
         
@@ -11325,7 +11222,7 @@ namespace Illuminate\Support\Facades {
         public static function table($table, $callback)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->table($table, $callback);
         }
         
@@ -11340,7 +11237,7 @@ namespace Illuminate\Support\Facades {
         public static function create($table, $callback)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->create($table, $callback);
         }
         
@@ -11354,7 +11251,7 @@ namespace Illuminate\Support\Facades {
         public static function drop($table)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->drop($table);
         }
         
@@ -11368,7 +11265,7 @@ namespace Illuminate\Support\Facades {
         public static function dropIfExists($table)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropIfExists($table);
         }
         
@@ -11383,7 +11280,7 @@ namespace Illuminate\Support\Facades {
         public static function rename($from, $to)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->rename($from, $to);
         }
         
@@ -11396,7 +11293,7 @@ namespace Illuminate\Support\Facades {
         public static function enableForeignKeyConstraints()
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->enableForeignKeyConstraints();
         }
         
@@ -11409,7 +11306,7 @@ namespace Illuminate\Support\Facades {
         public static function disableForeignKeyConstraints()
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->disableForeignKeyConstraints();
         }
         
@@ -11422,7 +11319,7 @@ namespace Illuminate\Support\Facades {
         public static function getConnection()
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->getConnection();
         }
         
@@ -11430,13 +11327,13 @@ namespace Illuminate\Support\Facades {
          * Set the database connection instance.
          *
          * @param \Illuminate\Database\Connection $connection
-         * @return \Illuminate\Database\Schema\PostgresBuilder 
+         * @return \Illuminate\Database\Schema\MySqlBuilder 
          * @static 
          */ 
         public static function setConnection($connection)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         return $instance->setConnection($connection);
         }
         
@@ -11450,7 +11347,7 @@ namespace Illuminate\Support\Facades {
         public static function blueprintResolver($resolver)
         {
             //Method inherited from \Illuminate\Database\Schema\Builder            
-                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->blueprintResolver($resolver);
         }
          
@@ -14636,8 +14533,6 @@ namespace  {
     class Config extends \Illuminate\Support\Facades\Config {}
 
     class Cookie extends \Illuminate\Support\Facades\Cookie {}
-
-    class Crypt extends \Illuminate\Support\Facades\Crypt {}
 
     class DB extends \Illuminate\Support\Facades\DB {}
 
