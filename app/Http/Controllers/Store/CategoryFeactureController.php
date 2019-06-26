@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store\CategoryFeacture;
+use Illuminate\Http\Request;
 
 class CategoryFeactureController extends Controller
 {
@@ -10,4 +11,5 @@ class CategoryFeactureController extends Controller
     {
         parent::__construct(CategoryFeacture::class);
     }
+
 }

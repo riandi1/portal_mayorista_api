@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Store\Category;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -11,5 +12,4 @@ class CategoryController extends Controller
     {
         parent::__construct(Category::class);
     }
-
 }

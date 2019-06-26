@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Store\Category;
+use App\Models\Store\Product;
 use App\Models\System\Parametrics\Country;
 use App\Models\System\Parametrics\State;
 use App\Models\System\Parametrics\City;
@@ -67,6 +69,23 @@ class RestController
         return jsend_success($user, 202, 'User has been created.');
     }
 
+
+    public function listCategory(){
+        //$categories = Category::with('subCategories')->find(1);
+        $categories = Category::with('subCategories')->get();
+        return $categories;
+    }
+
+
+    public function listProduct(){
+        $products = Product::all();
+        return $products;
+    }
+
+    public function product($id){
+        $product = Product::with('productFeactures')->find($id);
+        return $product;
+    }
 
 
     private function creaUserName($name, $surName)

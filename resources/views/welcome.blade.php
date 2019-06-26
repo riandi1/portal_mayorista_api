@@ -63,49 +63,32 @@
                 margin-bottom: 30px;
             }
         </style>
-
-        <script
-                src="https://www.paypal.com/sdk/js?client-id=sb">
-        </script>
     </head>
-    <body>
-        <div class="flex-center position-ref full-height">
+    <body style="background: #36D1DC;
+     background: -webkit-linear-gradient(to top, #5B86E5, #36D1DC);
+     background: linear-gradient(to top, #5B86E5, #36D1DC);">
+    <div class="flex-center position-ref full-height">
+        @if (Route::has('login'))
+            <div class="top-right links">
+                @auth
+                    <a href="{{ url('/home') }}">Home</a>
+                @else
+                    <a href="{{ route('login') }}">Login</a>
+                    <a href="{{ route('register') }}">Register</a>
+                @endauth
+            </div>
+        @endif
 
-
-            <div class="content">
-
-                <div id="paypal-button-container"></div>
-
+        <div class="content">
+            <div class="title m-b-md" style="color:white">
+                Ecommerce
+            </div>
+            <div class="container">
+                <video width="1000" height="600" controls>
+                    <source src="/video.mkv" type="video/mp4">
+                </video>
             </div>
         </div>
+    </div>
     </body>
 </html>
-<script>
-    paypal.Buttons({
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        "currency_code": "USD",
-                        value: '0.01'
-                    }
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                alert('Transaction completed by ' + details.payer.name.given_name);
-                // Call your server to save the transaction
-                return fetch('/paypal-transaction-complete', {
-                    method: 'post',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        orderID: data.orderID
-                    })
-                });
-            });
-        }
-    }).render('#paypal-button-container');
-</script>

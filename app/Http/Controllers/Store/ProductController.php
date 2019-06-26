@@ -19,8 +19,22 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $i=0;
+        $feactures="[";
+        foreach ($request->request as $key => $value){
+             if ($i>0){
+                 $feactures .= '{"key":"'.$key.'","value":"'.$value.'"},';
+                 $request->request->remove($key);
+             }
+            if ($key=="image10")  $i++;
+        }
+
+        $feactures = substr($feactures, 0, -1);
+        $feactures .=']';
+        $request->request->add(['product_feactures' => json_decode($feactures, true)]);
         $user = Auth::user();
-        $request->merge(['user_id' =>$user->id]);
+        $request->request->add(['user_id' => $user->id]);
+        //$request->merge(['user_id' =>$user->id]);
         $categoryFeactures = CategoryFeacture::where('category_id', $request->category_id)->get();
         $rows = 0;
         $rows2 = 0;
@@ -28,14 +42,14 @@ class ProductController extends Controller
         foreach ($categoryFeactures as $key => $value) {
             $cont = 0;
             $rows2 = 0;
-            foreach ($request->product_feactures as $keyp => $valuep) {
+
+           foreach ($request->product_feactures as $keyp => $valuep) {
                 if ($value->key===$valuep['key'])
                     $cont++;
                 $rows2++;
             }
-
-            if ($cont==0)
-                return jsend_fail('', 402, trans("The feactures do not correspond"));
+           if ($cont==0)
+                return jsend_fail('', 402, trans("The feactures do not correspond")); 
             $rows++;
         }
 
@@ -56,7 +70,6 @@ class ProductController extends Controller
             }
         }
         return $response;
-
     }
 
 
