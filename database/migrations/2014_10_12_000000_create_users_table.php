@@ -42,9 +42,11 @@ class CreateUsersTable extends Migration
             $table->boolean('seller')->nullable();
             $table->integer('balance')->default(0);
             $table->boolean('accept_terms')->nullable();
-            $table->softDeletes();
+            $table->boolean('active')->default(false);
+            $table->string('activation_token');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
             $table->unique(['document_type_id', 'document_number'], 'index_unique_user');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');

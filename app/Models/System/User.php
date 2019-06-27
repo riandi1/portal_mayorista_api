@@ -44,6 +44,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public $relationships = ['roles', 'permissions', 'documentType', 'country', 'state', 'city'];
 
+    protected $dates = ['deleted_at'];
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -82,7 +85,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'description',
         'seller',
         'balance',
-        'accept_terms'
+        'accept_terms',
+        'active',
+        'activation_token',
     ];
 
 
@@ -91,7 +96,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'activation_token'];
 
     protected $rules = [
         'name' => 'required|min:3',

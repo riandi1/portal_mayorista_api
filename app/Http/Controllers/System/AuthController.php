@@ -30,6 +30,8 @@ class AuthController extends BaseController
     {
         // TODO: remenber token in login
         $credentials = $request->only(["email", "password"]);
+        $credentials['active'] = 1;
+        $credentials['deleted_at'] = null;
         $_temp_user = User::where("email", "=", $credentials["email"])->first();
         if (!$_temp_user)
             return jsend_error(trans("messages.models.errors.not_found", ["model" => "User"]), 404);

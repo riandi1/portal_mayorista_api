@@ -52,6 +52,7 @@ Route::group(['prefix' => 'rest'], function () {
     Route::get('cities', 'RestController@getAllCity');
     Route::get('documentTypes', 'RestController@getAllDocumentType');
     Route::post('users', 'RestController@storeUser');
+    Route::get('signup/activate/{token}', 'RestController@signupActivate');
     Route::get('categories', 'RestController@listCategory');
     Route::get('products', 'RestController@listProduct');
     Route::get('products/{id}', 'RestController@product');

@@ -10,6 +10,7 @@ use App\Models\System\Parametrics\State;
 use App\Models\System\Parametrics\City;
 use App\Models\System\Parametrics\DocumentType;
 use App\Models\System\User;
+use App\Notifications\SignupActivate;
 use Illuminate\Http\Request;
 
 class RestController
@@ -62,13 +63,30 @@ class RestController
             'country_id' => $request->country_id,
             'state_id' => $request->state_id,
             'city_id' =>$request->city_id,
+            'activation_token'  => str_random(60),
         ]);
 
         if (!$user->hasRole('master'))
             $user->assignRole('master');
+
+
+        $user->notify(new SignupActivate($user));
+
         return jsend_success($user, 202, 'User has been created.');
     }
 
+
+    public function signupActivate($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+        if (!$user) {
+            return response()->json(['message' => 'El token de activación es inválido'], 404);
+        }
+        $user->active = true;
+        $user->activation_token = '';
+        $user->save();
+        return $user;
+    }
 
     public function listCategory(){
         //$categories = Category::with('subCategories')->find(1);

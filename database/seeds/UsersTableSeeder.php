@@ -24,6 +24,8 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
                 'country_id' => 45,
                 'state_id' => 15,
                 'city_id' => 641,
+                'activation_token' => 'xxxxxxxx',
+                'active' => true
             ]);
         if (!$developer->hasRole('master'))
             $developer->assignRole('master');
@@ -44,6 +46,8 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
                     'country_id' => 45,
                     'state_id' => 15,
                     'city_id' => 641,
+                    'activation_token' => 'xxxxxxxx',
+                    'active' => true
                 ]);
             if (!$user_created->hasRole($role_name))
                 $user_created->assignRole($role_name);
