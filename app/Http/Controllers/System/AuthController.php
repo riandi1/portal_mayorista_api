@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\System\Parameter;
 use App\Models\System\User;
+use App\Notifications\SignupActivate;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\Bridge\AccessToken;
+use Laravel\Passport\Passport;
 use Laravel\Passport\TokenRepository;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Socialite;
+use stdClass;
 
 class AuthController extends BaseController
 {
@@ -141,4 +147,81 @@ class AuthController extends BaseController
         Auth::user()->fill(['fcm_token' => $token])->saveOrFail();
         return jsend_success(Auth::user(), 201, null);
     }
+
+
+    public function redirect($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+    public function callback($provider)
+    {
+
+        $userSocial = Socialite::driver($provider)->user();
+        $idSocial = $provider . $userSocial->getId();
+        $userAprysa = User::where('social_id', $idSocial)->first();
+        //return $userSocial->token;
+        if ($userAprysa == null) {
+
+            $names = explode(" ", $userSocial->getName());
+            $lastName = "";
+            foreach ($names as $key => $name) {
+                if ($key > 0)
+                    $lastName .= $name . ' ';
+            }
+
+            $lastName = substr($lastName, 0, -1);
+            $userValid = User::where([['email', $userSocial->getEmail()]])->first();
+            if ($userValid != null) {
+                return jsend_fail('El correo electrónico ya ha sido registrado.');
+            }
+
+
+            // $password =str_random(10);
+            $user = User::create([
+                "name" => $userSocial->getName(),
+                "email" => $userSocial->getEmail(),
+                "first_surname" => $lastName,
+                "first_name" => $names[0],
+                "password" => bcrypt($userSocial->getId()),
+                'activation_token' => str_random(60),
+                "social_id" => $idSocial,
+            ]);
+
+            if (!$user->hasRole('master'))
+                $user->assignRole('master');
+
+
+            $user->notify(new SignupActivate($user));
+
+            return jsend_success($user, 202, 'User has been created.');
+
+        } else {
+            // TODO: remenber token in login
+            $credentials = $userAprysa->only(["email", "social_id"]);
+            $credentials['active'] = 1;
+            $credentials['deleted_at'] = null;
+            $_temp_user = User::where("email", "=", $credentials["email"])->first();
+            if (!$_temp_user)
+                return jsend_error(trans("messages.models.errors.not_found", ["model" => "User"]), 404);
+            if (!$_temp_user->hasPermissionTo('ALLOW_LOGIN'))
+                throw UnauthorizedException::forPermissions(['ALLOW_LOGIN']);
+
+            /** @var User $userAprysa */
+            $result = $userAprysa->createToken("{$userAprysa->name} access token");
+            $token = $result->accessToken;
+            if (!is_null($token)) {
+                $message = trans("messages.auth.login");
+                $_user = $userAprysa->toArray();
+                $_user["permissions"] = $userAprysa->getAllPermissions();
+                return jsend_success([
+                    'user' => $_user,
+                    'access_token' => $token
+                ], 200, $message);
+            }
+            return jsend_error(trans("messages.auth.errors.token_not_created"));
+        }
+    }
+
+
 }

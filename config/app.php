@@ -218,6 +218,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'FCM' => LaravelFCM\Facades\FCM::class,
         'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
+        //'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];

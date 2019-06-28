@@ -101,13 +101,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $rules = [
         'name' => 'required|min:3',
-        'document_number' => 'required|min:3',
+      //  'document_number' => 'required|min:3',
         'password' => 'required',
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'document_type_id' => 'required|exists:document_types,id',
-        'country_id' => 'required|exists:countries,id',
-        'state_id' => 'required|exists:states,id',
-        'city_id' => 'required|exists:cities,id'
+       // 'document_type_id' => 'required|exists:document_types,id',
+       // 'country_id' => 'required|exists:countries,id',
+        //'state_id' => 'required|exists:states,id',
+        //'city_id' => 'required|exists:cities,id'
     ];
 
     /* protected $appends = ['level'];

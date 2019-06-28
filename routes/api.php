@@ -43,6 +43,15 @@ Route::group([
 });
 
 
+
+Route::group(['middleware' => ['web']], function () {
+    //Socialite
+    Route::get('/redirect/{provider}', 'AuthController@redirect');
+    Route::get('/callback/{provider}', 'AuthController@callback');
+
+});
+
+
 // Users
 
 // Rest
@@ -135,8 +144,6 @@ Route::group([
 
     Route::apiResource('conversations', 'ConversationController');
     Route::apiResource('messages', 'MessageController');
-
-
 
 
 });
