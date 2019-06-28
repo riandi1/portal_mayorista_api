@@ -91,7 +91,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -155,6 +155,9 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
+
+       // Laravel\Socialite\SocialiteServiceProvider::class,
+
 
         /*
          * Application Service Providers...

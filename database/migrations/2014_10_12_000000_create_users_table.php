@@ -20,15 +20,15 @@ class CreateUsersTable extends Migration
             $table->string('image')->nullable();
             $table->string('password');
             $table->string('fcm_token')->nullable();
-            $table->unsignedInteger('document_type_id');
-            $table->string('document_number');
+            $table->unsignedInteger('document_type_id')->nullable();
+            $table->string('document_number')->nullable();
             $table->string('first_surname')->nullable();
             $table->string('last_surname')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->unsignedInteger('country_id');
-            $table->unsignedInteger('state_id');
-            $table->unsignedInteger('city_id');
+            $table->unsignedInteger('country_id')->nullable();
+            $table->unsignedInteger('state_id')->nullable();
+            $table->unsignedInteger('city_id')->nullable();
             $table->string('telephone')->nullable();
             $table->string('mobile')->nullable();
             $table->string('address')->nullable();
@@ -44,14 +44,15 @@ class CreateUsersTable extends Migration
             $table->boolean('accept_terms')->nullable();
             $table->boolean('active')->default(false);
             $table->string('activation_token');
+            $table->string('social_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-            $table->unique(['document_type_id', 'document_number'], 'index_unique_user');
+         /*   $table->unique(['document_type_id', 'document_number'], 'index_unique_user');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');*/
         });
     }
 

@@ -33,6 +33,6 @@ return [
         'model' => App\Models\System\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
-    ],
+    ],z
 
 ];

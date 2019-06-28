@@ -88,6 +88,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'accept_terms',
         'active',
         'activation_token',
+        'social_id',
     ];
 
 
@@ -96,7 +97,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'activation_token'];
+    protected $hidden = ['password', 'remember_token', 'activation_token','social_id'];
 
     protected $rules = [
         'name' => 'required|min:3',

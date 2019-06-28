@@ -18,7 +18,7 @@ class Product extends Model
         'name' => 'required|min:3',
         'price' => 'required|numeric',
         'category_id' => 'required|exists:categories,id',
-        'image1' => 'required'
+        //'image1' => 'required'
     ];
 
     public function category(): BelongsTo{

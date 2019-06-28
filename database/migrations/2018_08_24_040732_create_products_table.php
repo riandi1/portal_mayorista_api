@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('user_id');
             /* moneda y signo*/
             $table->unsignedInteger('category_id');
-            $table->string('image1');
+            $table->string('image1')->nullable();
             $table->string('image2')->nullable();
             $table->string('image3')->nullable();
             $table->string('image4')->nullable();
