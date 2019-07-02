@@ -2,51 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentSent;
 use App\Models\System\Comment;
 use App\Models\System\User;
 use App\Notifications\CommentNotification;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class CommentController extends Controller
+class CommentController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct(Comment::class);
+
+
+    public function index($id){
+        $comments = Comment::where('product_id', $id)->get();
+        return jsend_success($comments, 202);
+
+
     }
 
-    public function store(Request $request)
+    public function created(Request $request, $id)
     {
-        $request->merge([
-            'user_id' => Auth::id()
-        ]);
-        $response = parent::store($request);
-        $array = $response->getData(true);
-        if ($array['status'] === 'success') {
-            $id = $array['data']['id'];
-            /** @var Comment $comment */
-            $comment = Comment::with(Comment::$_relations)->findOrFail($id);
-            return jsend_success($comment);
-        }
-        return $response;
+
+        $user = Auth::user();
+
+        $comment = new Comment();
+        $comment->user_id = $user->id;
+        $comment->product_id = $id;
+        $comment->message = $request->message;
+        $comment->save();
+        broadcast(new CommentSent($user, $comment))->toOthers();
+
+        return ['status' => 'Message Sent!'];
+
     }
 
-    public function update(Request $request, $id)
-    {
-        $response = parent::update($request, $id);
-        $array = $response->getData(true);
-        if ($array['status'] === 'success') {
-            $id = $array['data']['id'];
-            /** @var Comment $comment */
-            $comment = Comment::with(Comment::$_relations)->findOrFail($id);
-            return jsend_success($comment);
-        }
-        return $response;
+    public function delete($id){
+        Comment::find($id)->delete();
+        return jsend_success($id, 202,  trans("messages.models.destroy"));
     }
 
-    public function destroy(Request $request, $id)
-    {
-        $response = parent::destroy($request, $id);
-        $array = $response->getData(true);
-    }
+
 }

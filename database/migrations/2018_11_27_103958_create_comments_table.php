@@ -17,7 +17,6 @@ class CreateCommentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('commented_user_id');
             $table->longText('message');
             $table->timestamps();
             $table->softDeletes();

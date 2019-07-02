@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\Store\Product;
+use App\Models\System\User;
+use App\Models\System\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -10,48 +11,33 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\Models\System\User;
-use App\Models\System\Message;
 
-
-
-class MessageSent implements ShouldBroadcast
+class CommentSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * User that sent the message
-     *
-     * @var User
-     */
-    public $user;
-    /**
-     * Message details
-     *
-     * @var Message
-     */
-    public $message;
 
+    public $user;
+
+    public $comment;
     /**
      * Create a new event instance.
      *
-    "status": "Message Sent!"
-
      * @return void
      */
-    public function __construct(User $user,Message $message)
+    public function __construct(User $user, Comment $comment)
     {
         $this->user = $user;
-        $this->message = $message;
+        $this->comment = $comment;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');//.$this->user->id
+        return new PrivateChannel('comment');
     }
 }

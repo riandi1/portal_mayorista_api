@@ -98,13 +98,13 @@ class ProductController extends Controller
 
         $response = parent::update($request, $id);
         $data = $response->getData(true);
-        if ($data["status"] == "success") {
+       /* if ($data["status"] == "success") {
             foreach ($request->product_feactures as $key => $value) {
                 $feacture = ProductFeacture::find($value['id']);
                 $feacture -> value = $value['value'];
                 $feacture->save();
             }
-        }
+        }*/
         return $response;
     }
 

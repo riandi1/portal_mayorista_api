@@ -120,16 +120,13 @@ Route::group([
     Route::apiResource('assignments', 'TagAssignmentController');
 
     // Comments
-    Route::apiResource('comments', 'CommentController');
+    Route::get('comments/{id}', 'CommentController@index');
+    Route::post('comments/{id}', 'CommentController@created');
+    Route::delete('comments/{id}', 'CommentController@delete');
 
     // Mails
     Route::apiResource('emails', 'EmailController');
 
-    // Dashboard
-    Route::group([
-        'prefix' => 'dashboard'
-    ], function () {
-    });
 
     // Pages
     Route::apiResource('pages', 'PageController');
@@ -141,10 +138,13 @@ Route::group([
     Route::apiResource('custom_fields', 'CustomFieldController');
     Route::get('custom_fields_for/{resource}', 'CustomFieldController@getFields');
 
-
-    Route::apiResource('conversations', 'ConversationController');
-    Route::apiResource('messages', 'MessageController');
-
+    Route::group(['prefix' => 'chat'], function () {
+        Route::get('conversations', 'ChatController@indexConversation');
+        Route::get('conversations/{id}', 'ChatController@showConversation');
+        Route::delete('conversations/{id}', 'ChatController@deleteConversation');
+        Route::post('messages/{id}', 'ChatController@storeMessage');
+        Route::delete('messages/{id}', 'ChatController@deleteMessage');
+    });
 
 });
 
