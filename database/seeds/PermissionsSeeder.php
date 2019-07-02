@@ -56,6 +56,11 @@ class PermissionsSeeder extends Seeder
         $this->modelPermissions(\App\Models\System\CustomField::class);
         $this->modelPermissions(\App\Models\System\CustomData::class);
         $this->modelPermissions(\App\Models\Store\Category::class);
+        $this->modelPermissions(\App\Models\Store\CategoryFeacture::class);
+        $this->modelPermissions(\App\Models\System\Parametrics\Country::class);
+        $this->modelPermissions(\App\Models\System\Parametrics\State::class);
+        $this->modelPermissions(\App\Models\System\Parametrics\City::class);
+        $this->modelPermissions(\App\Models\System\Parametrics\DocumentType::class);
     }
 
 

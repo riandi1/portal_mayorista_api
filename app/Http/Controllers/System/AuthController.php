@@ -160,7 +160,7 @@ class AuthController extends BaseController
         $userSocial = Socialite::driver($provider)->user();
         $idSocial = $provider . $userSocial->getId();
         $userAprysa = User::where('social_id', $idSocial)->first();
-        //return $userSocial->token;
+
         if ($userAprysa == null) {
 
             $names = explode(" ", $userSocial->getName());
@@ -183,7 +183,7 @@ class AuthController extends BaseController
                 "email" => $userSocial->getEmail(),
                 "first_surname" => $lastName,
                 "first_name" => $names[0],
-                "password" => bcrypt($userSocial->getId()),
+                "password" => bcrypt($idSocial),
                 'activation_token' => str_random(60),
                 "social_id" => $idSocial,
             ]);
@@ -206,6 +206,15 @@ class AuthController extends BaseController
                 return jsend_error(trans("messages.models.errors.not_found", ["model" => "User"]), 404);
             if (!$_temp_user->hasPermissionTo('ALLOW_LOGIN'))
                 throw UnauthorizedException::forPermissions(['ALLOW_LOGIN']);
+
+
+            $_temp_user = User::where([
+                ["email", $credentials["email"]],
+                ['active', true],
+                ['deleted_at', null]
+            ])->first();
+            if (!$_temp_user)
+                return jsend_error(trans("messages.auth.errors.unauthorized"), 401);
 
             /** @var User $userAprysa */
             $result = $userAprysa->createToken("{$userAprysa->name} access token");
