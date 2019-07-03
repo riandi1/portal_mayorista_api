@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\System\Parameter;
+use App\Models\System\Valuation;
 use Spatie\Permission\Models\Role;
 use App\Models\System\User;
 use App\Notifications\UserNotification;
@@ -168,4 +169,31 @@ class UserController extends Controller
         }
         return jsend_error("Message is required");
     }
+
+
+    public function valuation(Request $request, $id){
+
+        $user = User::find($id);
+        if ($user==null)
+            return jsend_error(trans("El usuario no se encuentra"), 404);
+        $userValuation = Auth::user();
+        $valuation = new Valuation();
+        $valuation->user_id = $user->id;
+        $valuation->valuation_user_id = $userValuation->id;
+        $valuation->valuation = $request->valuation;
+        $valuation->comment = $request->comment;
+        $valuation->save();
+        return jsend_success($valuation, 202);
+    }
+
+    public function valuationUser($id){
+
+        $user = User::find($id);
+        if ($user==null)
+            return jsend_error(trans("El usuario no se encuentra"), 404);
+
+        $valuations = Valuation::with('user', 'valuationUser')->where('user_id', $user->id)->get();
+        return jsend_success($valuations, 202);
+    }
+
 }

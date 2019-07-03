@@ -74,6 +74,8 @@ Route::group([
     Route::post('users/{user_id}/message', 'UserController@message');
     Route::put('user/{id}/image', 'UserController@updateImage')->name('user.image');
     Route::put('user/{id}/roles', 'UserController@updateRoles')->name('user.roles');
+    Route::post('user/{id}/valuation', 'UserController@valuation');
+    Route::get('user/{id}/valuation', 'UserController@valuationUser');
 
     // Store
     Route::group(['prefix' => 'store'], function () {
@@ -83,8 +85,6 @@ Route::group([
         Route::post('product/favorites/{product}', 'ProductController@favorite');
         Route::delete('product/favorites/{product}', 'ProductController@deleteFavorite');
         Route::get('product/favorites', 'ProductController@listFavorites');
-        Route::apiResource('movements', 'ProductMovementController');
-
     });
 
     // Roles
