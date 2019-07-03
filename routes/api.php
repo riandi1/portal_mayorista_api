@@ -56,10 +56,6 @@ Route::group(['middleware' => ['web']], function () {
 
 // Rest
 Route::group(['prefix' => 'rest'], function () {
-    Route::get('countries', 'RestController@getAllCountry');
-    Route::get('states', 'RestController@getAllState');
-    Route::get('cities', 'RestController@getAllCity');
-    Route::get('documentTypes', 'RestController@getAllDocumentType');
     Route::post('users', 'RestController@storeUser');
     Route::get('signup/activate/{token}', 'RestController@signupActivate');
     Route::get('categories', 'RestController@listCategory');
@@ -78,15 +74,6 @@ Route::group([
     Route::post('users/{user_id}/message', 'UserController@message');
     Route::put('user/{id}/image', 'UserController@updateImage')->name('user.image');
     Route::put('user/{id}/roles', 'UserController@updateRoles')->name('user.roles');
-
-
-    // Param
-    Route::group(['prefix' => 'param'], function () {
-        Route::apiResource('countries', 'CountryController');
-        Route::apiResource('states', 'StateController');
-        Route::apiResource('cities', 'CityController');
-        Route::apiResource('documentTypes', 'DocumentTypeController');
-    });
 
     // Store
     Route::group(['prefix' => 'store'], function () {
@@ -151,10 +138,3 @@ Route::group([
 Route::post('paypal-transaction-complete' , function () {
     return 'hello';
 });
-/*
-Route::get('testnoti', function () {
-    $user = \App\Models\System\User::find(1);
-    $user->notify(new \App\Notifications\MessageNotification());
-    return jsend_success($user, 200, "Notification sending to user: {$user->name}");
-});
-*/

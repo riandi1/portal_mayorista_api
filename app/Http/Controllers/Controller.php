@@ -102,14 +102,6 @@ class Controller extends BaseController
             if ($count = Category::where([['name', $request->name],['category_id', $request->category_id]])->count())
                 return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
         }
-        if ($this->model::basename()=='DocumentType'){
-            if ($count = DocumentType::where([['name', $request->name],['country_id', $request->category_id]])->count())
-                return jsend_fail(['The name and country have already been registered.'], 402, trans("The given data was invalid."));
-        }
-        if ($this->model::basename()=='User'){
-            if ($count = User::where([['document_type_id', $request->document_type_id],['document_number', $request->document_number]])->count())
-                return jsend_fail(['The number and type document have already been registered.'], 402, trans("The given data was invalid."));
-        }
         if ($this->model::basename()=='Product'){
             if ($count = Product::where([['name', $request->name],['category_id', $request->category_id]])->count())
                 return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
@@ -166,14 +158,6 @@ class Controller extends BaseController
             if ($count = Category::where([['name', $request->name],['category_id', $request->category_id],['id', '<>', $id]])->count())
                 return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
         }
-        if ($this->model::basename()=='DocumentType'){
-            if ($count = DocumentType::where([['name', $request->name],['country_id', $request->category_id],['id', '<>', $id]])->count())
-                return jsend_fail(['The name and country have already been registered.'], 402, trans("The given data was invalid."));
-        }
-        if ($this->model::basename()=='User'){
-            if ($count = User::where([['document_type_id', $request->document_type_id],['document_number', $request->document_number],['id', '<>', $id]])->count())
-                return jsend_fail(['The number and type document have already been registered.'], 402, trans("The given data was invalid."));
-        }
         if ($this->model::basename()=='Product'){
             if ($count = Product::where([['name', $request->name],['category_id', $request->category_id],['id', '<>', $id]])->count())
                 return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
@@ -215,7 +199,7 @@ class Controller extends BaseController
             $this->model,
             $record->toArray()
         );
-        return jsend_success($record, 202, trans("messages.models.update", ["model" => $this->model::basename()]));
+        return jsend_success($record, 202, trans("El registro ha sido actualizado"));
     }
 
     /**
@@ -237,7 +221,7 @@ class Controller extends BaseController
             $record->toArray()
         );
         $record->delete();
-        return jsend_success($record, 202, trans("messages.models.destroy", ["model" => $this->model::basename()]));
+        return jsend_success($record, 202, trans("El registro ha sido eliminado"));
     }
 
     /**

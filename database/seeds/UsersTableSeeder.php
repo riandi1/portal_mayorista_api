@@ -16,14 +16,8 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
         $developer = User::where('email', '=', $developer_email)->first();
         if (!$developer)
             $developer = User::updateOrCreate([
-                "name" => "Master",
                 "email" => $developer_email,
                 "password" => bcrypt("123456"),
-                'document_number' => '111111',
-                'document_type_id' => 1,
-                'country_id' => 45,
-                'state_id' => 15,
-                'city_id' => 641,
                 'activation_token' => 'xxxxxxxx',
                 'active' => true
             ]);
@@ -38,14 +32,8 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
             $user_created = User::where('email', '=', "$role_name.user@platform.com")->first();
             if (!$user_created)
                 $user_created = User::updateOrCreate([
-                    "name" => "User $role_name",
                     "email" => "$role_name.user@platform.com",
                     "password" => bcrypt("$role_name.pass"),
-                    'document_number' => '111111'.$role_name,
-                    'document_type_id' => 1,
-                    'country_id' => 45,
-                    'state_id' => 15,
-                    'city_id' => 641,
                     'activation_token' => 'xxxxxxxx',
                     'active' => true
                 ]);

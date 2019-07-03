@@ -6,6 +6,7 @@ use App\Models\System\Parameter;
 use App\Models\System\User;
 use App\Notifications\SignupActivate;
 use Carbon\Carbon;
+use DateTime;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -40,19 +41,19 @@ class AuthController extends BaseController
         $credentials['deleted_at'] = null;
         $_temp_user = User::where("email", "=", $credentials["email"])->first();
         if (!$_temp_user)
-            return jsend_error(trans("messages.models.errors.not_found", ["model" => "User"]), 404);
+            return jsend_error(trans("El usuario no se encuentra"), 404);
         if (!$_temp_user->hasPermissionTo('ALLOW_LOGIN'))
             throw UnauthorizedException::forPermissions(['ALLOW_LOGIN']);
         if (!($access_token = $request->bearerToken()) || !($user = Auth::guard('api')->user())) {
             if (!Auth::attempt($credentials))
-                return jsend_error(trans("messages.auth.errors.unauthorized"), 401);
+                return jsend_error(trans("El usuario no esta autorizado"), 401);
             $user = Auth::user();
             if (!$token_result = $user->createToken($user->name . " access token"))
-                return jsend_error(trans("messages.auth.errors.token_not_created"));
+                return jsend_error(trans("Token de usuario no creado"));
             $access_token = $token_result->accessToken;
-            $message = trans("messages.auth.login");
+            $message = trans("Has iniciado sesion");
             $token = $token_result->token;
-        } else $message = trans('messages.auth.already_logged');
+        } else $message = trans('El usuario ya ha iniciado sesion');
         if (!isset($token))
             $token = Auth::guard('api')->user()->token();
         $token->save(["expires_at" => Carbon::now()->addHour(env("HOURS_FOR_TOKEN_EXPIRATION"))]); // FIXME: no work
@@ -78,7 +79,7 @@ class AuthController extends BaseController
         $revoked = $token->revoke();
         $deleted = $token->delete();
         $response['user'] = $user;
-        return jsend_success($response, 202, trans("messages.auth.logout"));
+        return jsend_success($response, 202, trans("Has cerrado la sesion"));
     }
 
     /**
@@ -158,6 +159,10 @@ class AuthController extends BaseController
     {
 
         $userSocial = Socialite::driver($provider)->user();
+        if ($userSocial->getEmail() == null) {
+            return jsend_fail('La cuenta a asociar no cuenta con un correo');
+        }
+
         $idSocial = $provider . $userSocial->getId();
         $userAprysa = User::where('social_id', $idSocial)->first();
 
@@ -177,12 +182,17 @@ class AuthController extends BaseController
             }
 
 
-            // $password =str_random(10);
+            $imagen = file_get_contents($userSocial->getAvatar());
+            $fecha = new DateTime();
+            file_put_contents(public_path().'/storage/User-image-'.$fecha->getTimestamp().'.jpeg', $imagen);
+
             $user = User::create([
                 "name" => $userSocial->getName(),
                 "email" => $userSocial->getEmail(),
                 "first_surname" => $lastName,
                 "first_name" => $names[0],
+                "image" => '/storage/User-image-'.$fecha->getTimestamp().'.jpeg',
+                "provider_access" => $provider,
                 "password" => bcrypt($idSocial),
                 'activation_token' => str_random(60),
                 "social_id" => $idSocial,
@@ -194,7 +204,7 @@ class AuthController extends BaseController
 
             $user->notify(new SignupActivate($user));
 
-            return jsend_success($user, 202, 'User has been created.');
+            return jsend_success($user, 202, 'El usuario ha sido creado');
 
         } else {
             // TODO: remenber token in login
@@ -203,7 +213,7 @@ class AuthController extends BaseController
             $credentials['deleted_at'] = null;
             $_temp_user = User::where("email", "=", $credentials["email"])->first();
             if (!$_temp_user)
-                return jsend_error(trans("messages.models.errors.not_found", ["model" => "User"]), 404);
+                return jsend_error(trans("El usuario no se encuentra"), 404);
             if (!$_temp_user->hasPermissionTo('ALLOW_LOGIN'))
                 throw UnauthorizedException::forPermissions(['ALLOW_LOGIN']);
 
@@ -214,13 +224,13 @@ class AuthController extends BaseController
                 ['deleted_at', null]
             ])->first();
             if (!$_temp_user)
-                return jsend_error(trans("messages.auth.errors.unauthorized"), 401);
+                return jsend_error(trans("El usuario no esta autorizado"), 401);
 
             /** @var User $userAprysa */
             $result = $userAprysa->createToken("{$userAprysa->name} access token");
             $token = $result->accessToken;
             if (!is_null($token)) {
-                $message = trans("messages.auth.login");
+                $message = trans("Has iniciado sesion");
                 $_user = $userAprysa->toArray();
                 $_user["permissions"] = $userAprysa->getAllPermissions();
                 return jsend_success([
@@ -228,7 +238,7 @@ class AuthController extends BaseController
                     'access_token' => $token
                 ], 200, $message);
             }
-            return jsend_error(trans("messages.auth.errors.token_not_created"));
+            return jsend_error(trans("Token de usuario no creado"));
         }
     }
 

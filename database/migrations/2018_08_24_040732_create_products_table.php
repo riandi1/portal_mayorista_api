@@ -19,9 +19,8 @@ class CreateProductsTable extends Migration
             $table->string('description')->nullable();
             $table->integer('price');
             $table->integer('seen')->nullable();
-            $table->integer('quantity')->default(1);
+            $table->boolean('to_sell')->default(false);
             $table->unsignedInteger('user_id');
-            /* moneda y signo*/
             $table->unsignedInteger('category_id');
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();

@@ -18,11 +18,8 @@ class CreatePlansTable extends Migration
             $table->string('name')->default('Recarga');
             $table->integer('value');
             $table->integer('promotion')->nullable();
-            $table->unsignedInteger('country_id');
             $table->softDeletes();
             $table->timestamps();
-            $table->unique(['value', 'country_id'], 'index_unique_plan');
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 
