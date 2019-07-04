@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SignupActivate extends Notification
+class PasswordResetSuccess extends Notification
 {
     use Queueable;
 
@@ -40,13 +40,12 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/rest/signup/activate/'.$notifiable->activation_token);
         return (new MailMessage)
-            ->subject('Confirma tu cuenta')
+            ->subject('Restablecimiento de contraseña exitosa')
             ->greeting('Hola!')
-            ->line('Gracias por resgistrarse! Antes de continuar, debes confirmar tu cuenta.')
-            ->action('Confirmar cuenta', url($url))
-            ->line('Muchas gracias por utilizar nuestra aplicación!')
+            ->line('Usted ha cambiado su contraseña con éxito.')
+            ->line('Si cambió la contraseña, no se requiere ninguna acción adicional.')
+            ->line('Si no cambió la contraseña, proteja su cuenta.')
             ->salutation('Saludos, '. config('app.name'));
     }
 

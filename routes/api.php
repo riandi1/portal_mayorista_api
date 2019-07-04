@@ -26,6 +26,7 @@ Route::group([
     Route::post('login', 'AuthController@login')->name('auth.login');
     Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('logout', 'AuthController@logout')->name('auth.logout');
+        Route::put('change', 'AuthController@change');
         Route::get('validate', 'AuthController@validate')->name('auth.validate');
         Route::get('notifications', 'AuthController@notifications')->name('auth.notifications');
         Route::put('notifications/read', 'AuthController@readNotifications')->name('auth.read_notifications');
@@ -41,6 +42,14 @@ Route::group([
         });
     });
 });
+
+// Password
+Route::group(['prefix' => 'password'], function () {
+    Route::post('create', 'AuthController@create');
+    Route::get('find/{token}', 'AuthController@find');
+    Route::post('reset', 'AuthController@reset');
+});
+
 
 
 
@@ -85,6 +94,10 @@ Route::group([
         Route::post('product/favorites/{product}', 'ProductController@favorite');
         Route::delete('product/favorites/{product}', 'ProductController@deleteFavorite');
         Route::get('product/favorites', 'ProductController@listFavorites');
+        Route::delete('product/{id}/reported', 'ProductController@reported');
+        Route::get('product/active', 'ProductController@listProductActive');
+        Route::post('product/{id}/active', 'ProductController@productActive');
+
     });
 
     // Roles

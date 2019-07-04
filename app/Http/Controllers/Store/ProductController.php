@@ -19,6 +19,12 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
+        $user = Auth::user();
+
+        if ($user->telephone==null or $user->image==null)
+            return jsend_error(trans("Complete su perfil se requiere  telefono y  foto "), 402);
+
         $i=0;
         $feactures="[";
         foreach ($request->request as $key => $value){
@@ -32,7 +38,7 @@ class ProductController extends Controller
         $feactures = substr($feactures, 0, -1);
         $feactures .=']';
         $request->request->add(['product_feactures' => json_decode($feactures, true)]);
-        $user = Auth::user();
+
         $request->request->add(['user_id' => $user->id]);
         //$request->merge(['user_id' =>$user->id]);
         $categoryFeactures = CategoryFeacture::where('category_id', $request->category_id)->get();
@@ -75,36 +81,58 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $categoryFeactures = CategoryFeacture::where('category_id', $request->category_id)->get();
-        $rows = 0;
-        $rows2 = 0;
+        $valid=0;
+        if ($request->description==null) $valid++;
 
-        foreach ($categoryFeactures as $key => $value) {
-            $cont = 0;
-            $rows2 = 0;
-            foreach ($request->product_feactures as $keyp => $valuep) {
-                if ($value->key===$valuep['key'])
-                    $cont++;
-                $rows2++;
+        if ($valid==0) {
+            $i = 0;
+            $feactures = "[";
+            foreach ($request->request as $key => $value) {
+                if ($i > 0) {
+                    $feactures .= '{"key":"' . $key . '","value":"' . $value . '"},';
+                    $request->request->remove($key);
+                }
+                if ($key == "description") $i++;
             }
 
-            if ($cont==0)
-                return jsend_fail('', 402, trans("The feactures do not correspond"));
-            $rows++;
-        }
+            $feactures = substr($feactures, 0, -1);
+            $feactures .= ']';
+            $request->request->add(['product_feactures' => json_decode($feactures, true)]);
 
-        if ($rows!=$rows2)
-            return jsend_fail('', 402, trans("The feactures do not correspond"));
+            $categoryFeactures = CategoryFeacture::where('category_id', $request->category_id)->get();
+            $rows = 0;
+            $rows2 = 0;
+
+            foreach ($categoryFeactures as $key => $value) {
+                $cont = 0;
+                $rows2 = 0;
+
+                foreach ($request->product_feactures as $keyp => $valuep) {
+                    if ($value->key === $valuep['key'])
+                        $cont++;
+                    $rows2++;
+                }
+                if ($cont == 0)
+                    return jsend_fail('', 402, trans("The feactures do not correspond"));
+                $rows++;
+            }
+
+            if ($rows != $rows2)
+                return jsend_fail('', 402, trans("The feactures do not correspond"));
+
+        }
 
         $response = parent::update($request, $id);
         $data = $response->getData(true);
-       /* if ($data["status"] == "success") {
-            foreach ($request->product_feactures as $key => $value) {
-                $feacture = ProductFeacture::find($value['id']);
-                $feacture -> value = $value['value'];
-                $feacture->save();
+        if ($data["status"] == "success") {
+            if ($valid==0) {
+                foreach ($request->product_feactures as $key => $value) {
+                    $feacture = ProductFeacture::where([['product_id', $id], ['key', $value['key']]])->first();
+                    $feacture->value = $value['value'];
+                    $feacture->save();
+                }
             }
-        }*/
+        }
         return $response;
     }
 
@@ -138,6 +166,35 @@ class ProductController extends Controller
             ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
             ->get();
         return jsend_success($products, 202);
+
+    }
+
+    public function reported($id){
+        $product = Product::find($id);
+        if ($product==null)
+            return jsend_error(trans("El producto no se encuentra"), 404);
+
+        $product->reported = true;
+        $product->save();
+        $product->delete();
+        return jsend_success($product, 202, 'El producto se ha reportado con exito');
+
+    }
+
+    public function listProductActive(){
+        $products = Product::where('active', false)->get();
+        return jsend_success($products, 202);
+    }
+
+    public function productActive($id){
+
+        $product = Product::find($id);
+        if ($product==null)
+             return jsend_error(trans("El producto no se encuentra"), 404);
+
+        $product->active = true;
+        $product->save();
+        return jsend_success($product, 202);
 
     }
 

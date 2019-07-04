@@ -7,18 +7,20 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SignupActivate extends Notification
+class PasswordResetRequest extends Notification
 {
     use Queueable;
+
+    protected $token;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -40,13 +42,13 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/rest/signup/activate/'.$notifiable->activation_token);
+        $url = url('/api/password/find/'.$this->token);
         return (new MailMessage)
-            ->subject('Confirma tu cuenta')
+            ->subject('Solicitud de restablecimiento de contraseña')
             ->greeting('Hola!')
-            ->line('Gracias por resgistrarse! Antes de continuar, debes confirmar tu cuenta.')
-            ->action('Confirmar cuenta', url($url))
-            ->line('Muchas gracias por utilizar nuestra aplicación!')
+            ->line('Está recibiendo este correo electrónico porque recibimos una solicitud de restablecimiento de contraseña para su cuenta.')
+            ->action('Restablecer la contraseña', url($url))
+            ->line('Si no solicitó un restablecimiento de contraseña, no es necesario realizar ninguna otra acción.')
             ->salutation('Saludos, '. config('app.name'));
     }
 

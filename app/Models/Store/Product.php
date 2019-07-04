@@ -13,12 +13,11 @@ class Product extends Model
 {
 
     public $relationships = ['movements','category','productFeactures','favorites'];
-    protected $fillable = ['category_id','user_id','id', 'name', 'description','price','seen','quantity','image1', 'image2', 'image3','image4', 'image5', 'image6','image7', 'image8', 'image9', 'image10'];
+    protected $fillable = ['category_id','user_id','id', 'name', 'description','price','seen','negotiable_price','reported','image1', 'image2', 'image3','image4', 'image5', 'image6','image7', 'image8', 'image9', 'image10'];
     protected $rules = [
         'name' => 'required|min:3',
         'price' => 'required|numeric',
         'category_id' => 'required|exists:categories,id',
-        //'image1' => 'required'
     ];
 
     public function category(): BelongsTo{
