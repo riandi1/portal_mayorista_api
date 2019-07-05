@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         Notifiable,
         HasRoles;
 
-    public $relationships = ['roles', 'permissions'];
+    public $relationships = ['roles', 'permissions','recharges','products'];
 
     protected $dates = ['deleted_at'];
 
@@ -61,7 +61,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'last_name',
         'latitude',
         'longitude',
+        'extension',
         'telephone',
+        'active_telephone',
+        'activation_telephone',
         'gender',
         'birthdate',
         'schedule',
@@ -80,7 +83,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'activation_token','social_id','active'];
+    protected $hidden = ['password', 'remember_token', 'activation_token','social_id','active','active_telephone'];
 
     protected $rules = [
         'password' => 'required',
@@ -117,6 +120,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function conversationReceiver(){
         return $this->hasMany(Conversation::class, 'user_receiver_id', 'id');
+    }
+
+    public  function recharges(): HasMany{
+        return $this->hasMany(UserRecharge::class, 'user_id', 'id');
     }
 
 }

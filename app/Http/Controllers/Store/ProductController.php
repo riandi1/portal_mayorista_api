@@ -55,12 +55,12 @@ class ProductController extends Controller
                 $rows2++;
             }
            if ($cont==0)
-                return jsend_fail('', 402, trans("The feactures do not correspond")); 
+                return jsend_fail('', 402, trans("Las características no corresponden."));
             $rows++;
         }
 
         if ($rows!=$rows2)
-            return jsend_fail('', 402, trans("The feactures do not correspond"));
+            return jsend_fail('', 402, trans("Las características no corresponden."));
 
         $response = parent::store($request);
         $data = $response->getData(true);
@@ -82,7 +82,9 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $valid=0;
-        if ($request->description==null) $valid++;
+        if ($request->price==null)
+            $valid++;
+
 
         if ($valid==0) {
             $i = 0;
@@ -113,12 +115,12 @@ class ProductController extends Controller
                     $rows2++;
                 }
                 if ($cont == 0)
-                    return jsend_fail('', 402, trans("The feactures do not correspond"));
+                    return jsend_fail('', 402, trans("Las características no corresponden."));
                 $rows++;
             }
 
             if ($rows != $rows2)
-                return jsend_fail('', 402, trans("The feactures do not correspond"));
+                return jsend_fail('', 402, trans("Las características no corresponden."));
 
         }
 
@@ -153,7 +155,7 @@ class ProductController extends Controller
              "user_id" => $user->id
             ]);
         }
-        return jsend_success($product, 202, trans("messages.models.update", ["model" => $this->model::basename()]));
+        return jsend_success($product, 202, trans("El registro ha sido actualizado"));
     }
 
 

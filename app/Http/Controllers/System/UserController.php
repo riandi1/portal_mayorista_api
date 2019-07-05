@@ -83,7 +83,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+//return $request;
         $user_target = User::findOrFail($id);
 
 
@@ -195,5 +195,6 @@ class UserController extends Controller
         $valuations = Valuation::with('user', 'valuationUser')->where('user_id', $user->id)->get();
         return jsend_success($valuations, 202);
     }
+
 
 }

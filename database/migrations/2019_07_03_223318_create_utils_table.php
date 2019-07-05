@@ -15,6 +15,7 @@ class CreateUtilsTable extends Migration
     {
         Schema::create('utils', function (Blueprint $table) {
             $table->increments('id');
+
             $table->timestamps();
         });
     }

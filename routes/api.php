@@ -85,6 +85,10 @@ Route::group([
     Route::put('user/{id}/roles', 'UserController@updateRoles')->name('user.roles');
     Route::post('user/{id}/valuation', 'UserController@valuation');
     Route::get('user/{id}/valuation', 'UserController@valuationUser');
+    Route::get('userinfo', 'UserController@listUserInfo');
+
+
+    Route::apiResource('recharges', 'UserRechargeController');
 
     // Store
     Route::group(['prefix' => 'store'], function () {
@@ -99,6 +103,10 @@ Route::group([
         Route::post('product/{id}/active', 'ProductController@productActive');
 
     });
+
+    Route::put('/smsconfirmation', 'SmsController@sendSms');
+    Route::post('/smsconfirmation', 'SmsController@active');
+
 
     // Roles
     Route::apiResource('roles', 'RoleController');

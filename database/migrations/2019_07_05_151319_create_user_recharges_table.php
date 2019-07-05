@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserPlansTable extends Migration
+class CreateUserRechargesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateUserPlansTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_plans', function (Blueprint $table) {
+        Schema::create('user_recharges', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->default('Recarga');
+            $table->integer('value');
+            $table->integer('promotion')->nullable();
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('plan_id');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ class CreateUserPlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_plans');
+        Schema::dropIfExists('user_recharges');
     }
 }

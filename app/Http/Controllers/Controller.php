@@ -100,23 +100,19 @@ class Controller extends BaseController
         /** Rules model fields compounds*/
         if ($this->model::basename()=='Category'){
             if ($count = Category::where([['name', $request->name],['category_id', $request->category_id]])->count())
-                return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
+                return jsend_fail(['El nombre y la categoría ya han sido registrados.'], 402, trans("Los datos dados no son válidos."));
         }
         if ($this->model::basename()=='Product'){
             if ($count = Product::where([['name', $request->name],['category_id', $request->category_id]])->count())
-                return jsend_fail(['The name and category have already been registered.'], 402, trans("The given data was invalid."));
-        }
-        if ($this->model::basename()=='Plan'){
-            if ($count = Plan::where([['value', $request->value],['country_id', $request->country_id]])->count())
-                return jsend_fail(['The value and country have already been registered.'], 402, trans("The given data was invalid."));
+                return jsend_fail(['El nombre y la categoría ya han sido registrados.'], 402, trans("Los datos dados no son válidos."));
         }
         if ($this->model::basename()=='ProductFeacture'){
             if ($count = ProductFeacture::where([['key', $request->key],['product_id', $request->product_id]])->count())
-                return jsend_fail(['The key and product have already been registered.'], 402, trans("The given data was invalid."));
+                return jsend_fail(['La caracteristica y el producto ya han sido registrados.'], 402, trans("Los datos dados no son válidos."));
         }
         if ($this->model::basename()=='CategoryFeacture'){
             if ($count = CategoryFeacture::where([['key', $request->key],['category_id', $request->category_id]])->count())
-                return jsend_fail(['The key and category have already been registered.'], 402, trans("The given data was invalid."));
+                return jsend_fail(['La caracteristica y la categoria ya han sido registrados.'], 402, trans("Los datos dados no son válidos."));
         }
 
         $request = $this->saveOrUpdateRequestFiles($request);
@@ -139,9 +135,8 @@ class Controller extends BaseController
             $this->model,
             $record->toArray()
         );
-        return jsend_success($record->toArray(), 200, trans("messages.models.store", ["model" => $this->model::basename()]));
 
-
+        return jsend_success($record->toArray(), 200, trans("El registro se ha creado"));
     }
 
     /**
