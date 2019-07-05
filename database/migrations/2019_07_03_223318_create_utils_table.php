@@ -15,8 +15,11 @@ class CreateUtilsTable extends Migration
     {
         Schema::create('utils', function (Blueprint $table) {
             $table->increments('id');
-
+            $table->string('key')->unique();
+            $table->integer('value');
+            $table->string('alias');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

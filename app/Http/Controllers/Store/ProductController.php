@@ -6,6 +6,7 @@ use App\Models\Store\CategoryFeacture;
 use App\Models\Store\Favorite;
 use App\Models\Store\Product;
 use App\Models\Store\ProductFeacture;
+use App\Models\System\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,11 +20,15 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         $user = Auth::user();
+       /* $util = Util::where('key', 'PRECIO_PUBLICACION')->first();
+        $result =  $util->value - $user->balance;
+        if ($result > 0)
+            return jsend_error(trans("Su sueldo no es suficiente, recargue: ".$result), 402);*/
+
 
         if ($user->telephone==null or $user->image==null)
-            return jsend_error(trans("Complete su perfil se requiere  telefono y  foto "), 402);
+            return jsend_error(trans("Complete su perfil se requiere telefono y foto"), 402);
 
         $i=0;
         $feactures="[";
@@ -73,6 +78,8 @@ class ProductController extends Controller
                         "product_id" => $data["data"]["id"]
                     ]);
                 }
+                $user->balance = $user->balance - $util->value;
+                $user->save();
             }
         }
         return $response;
@@ -198,6 +205,26 @@ class ProductController extends Controller
         $product->save();
         return jsend_success($product, 202);
 
+    }
+
+
+    public function positioning(Request $request, $id){
+
+        $product = Product::find($id);
+        if(!$product)
+            return jsend_error(trans("El producto no se encuentra"), 404);
+
+        $user = Auth::user();
+        $util= Util::where('key', 'PRECIO_POSICION')->first();
+        $result = $util->value*$request->positioning - $user->balance;
+        if($result > 0)
+            return jsend_error(trans("Su sueldo no es suficiente, recargue: ".$result), 402);
+
+        $product->web_positioning = $product->web_positioning + $request->positioning;
+        $product->save();
+        $user->balance=$user->balance - $util->value*$request->positioning;
+        $user->save();
+        return jsend_success($product, 202, 'El producto se ha posicionado '.$request->positioning.' niveles arriba');
     }
 
 }

@@ -45,7 +45,7 @@ class RestController
         $user->active = true;
         $user->activation_token = '';
         $user->save();
-        return redirect('http://104.140.246.214/login');
+        return redirect(env('APP_FRONT_URL', 'http://104.140.246.214').'/login');
     }
 
     public function listCategory(){
@@ -56,7 +56,7 @@ class RestController
 
 
     public function listProduct(){
-        $products = Product::all();
+        $products = Product::orderBy('web_positioning', 'DESC')->get();
         return $products;
     }
 

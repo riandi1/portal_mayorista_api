@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('location')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
             $table->string('extension')->nullable();
             $table->string('telephone')->nullable();
             $table->boolean('active_telephone')->default(false);

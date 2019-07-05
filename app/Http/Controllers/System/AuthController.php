@@ -290,7 +290,7 @@ class AuthController extends BaseController
             ], 404);
         }
         //return response()->json($passwordReset);
-        return redirect('http://104.140.246.214/resetpassword?token='.$token);
+        return redirect(env('APP_FRONT_URL', 'http://104.140.246.214').'/resetpassword/'.$token);
     }
 
 
@@ -300,24 +300,27 @@ class AuthController extends BaseController
          $request->validate([
              'email' => 'required|string|email',
              'password' => 'required|string|confirmed',
-             'token' => 'required|string'
+            // 'token' => 'required|string'
          ]);
 
-        $passwordReset = PasswordReset::where('token', $request->token)->first();
+       /* $passwordReset = PasswordReset::where('token', $request->token)->first();
         if (!$passwordReset)
             return response()->json([
                 'message' => 'Este token de restablecimiento de contraseña no es válido.'
-            ], 404);
+            ], 404);*/
         $user = User::where('email', $request->email)->first();
         if (!$user)
             return response()->json([
                 'message' => 'No podemos encontrar un usuario con esa dirección de correo electrónico.'
             ], 404);
         $user->password = bcrypt($request->password);
+        $user->active = true;
         $user->save();
-        $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess($passwordReset));
-        return response()->json($user);
+       // $passwordReset->delete();
+        $user->notify(new PasswordResetSuccess('sss'));//$passwordReset
+        //return response()->json($user);
+        return jsend_success($user, 202, trans("Usted ha cambiado su contraseña con éxito"));
+
     }
 
     public function change(Request $request)

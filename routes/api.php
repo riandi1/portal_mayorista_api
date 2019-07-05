@@ -101,6 +101,7 @@ Route::group([
         Route::delete('product/{id}/reported', 'ProductController@reported');
         Route::get('product/active', 'ProductController@listProductActive');
         Route::post('product/{id}/active', 'ProductController@productActive');
+        Route::put('product/positioning/{id}', 'ProductController@positioning');
 
     });
 
