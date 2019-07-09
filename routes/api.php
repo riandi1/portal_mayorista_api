@@ -99,8 +99,10 @@ Route::group([
         Route::delete('product/favorites/{product}', 'ProductController@deleteFavorite');
         Route::get('product/favorites', 'ProductController@listFavorites');
         Route::delete('product/{id}/reported', 'ProductController@reported');
-        Route::get('product/active', 'ProductController@listProductActive');
-        Route::post('product/{id}/active', 'ProductController@productActive');
+        Route::get('product/reported', 'ProductController@listReported');
+        Route::put('product/{id}/inactive', 'ProductController@inactive');
+        //Route::get('product/active', 'ProductController@listProductActive');
+        //Route::post('product/{id}/active', 'ProductController@productActive');
         Route::put('product/positioning/{id}', 'ProductController@positioning');
 
     });

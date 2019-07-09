@@ -21,8 +21,8 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->integer('seen')->nullable();
             $table->boolean('negotiable_price')->default(false);
-            $table->boolean('reported')->default(false);
-            $table->boolean('active')->default(false);
+            $table->integer('reported')->nullable();
+            $table->boolean('active')->default(true);
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('category_id');
             $table->string('image1')->nullable();
@@ -35,8 +35,8 @@ class CreateProductsTable extends Migration
             $table->string('image8')->nullable();
             $table->string('image9')->nullable();
             $table->string('image10')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

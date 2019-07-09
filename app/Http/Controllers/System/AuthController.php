@@ -208,7 +208,7 @@ class AuthController extends BaseController
 
             $user->notify(new SignupActivate($user));
 
-            return jsend_success($user, 202, 'El usuario ha sido creado');
+            return jsend_success($user, 202, 'El usuario ha sido creado, ¡Hemos enviado por correo electrónico el enlace para confirmar su contraseña!');
 
         } else {
             // TODO: remenber token in login
@@ -348,7 +348,8 @@ class AuthController extends BaseController
         $revoked = $token->revoke();
         $deleted = $token->delete();
         $response['user'] = $user;
-        return jsend_success($response, 202, trans("Se ha cambiado la contraseña, por favor inicie sesion nuevamente"));
+        //return jsend_success($response, 202, trans("Se ha cambiado la contraseña, por favor inicie sesion nuevamente"));
+        return redirect(env('APP_FRONT_URL', 'http://104.140.246.214').'/login');
     }
 
 }

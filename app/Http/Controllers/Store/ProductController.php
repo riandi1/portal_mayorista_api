@@ -6,6 +6,7 @@ use App\Models\Store\CategoryFeacture;
 use App\Models\Store\Favorite;
 use App\Models\Store\Product;
 use App\Models\Store\ProductFeacture;
+use App\Models\Store\Reported;
 use App\Models\System\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,8 @@ class ProductController extends Controller
             return jsend_error(trans("Su sueldo no es suficiente, recargue: ".$result), 402);*/
 
 
-        if ($user->telephone==null or $user->image==null)
-            return jsend_error(trans("Complete su perfil se requiere telefono y foto"), 402);
+        if ($user->telephone==null or $user->image==null or $user->latitude==null or $user->longitude==null)
+            return jsend_error(trans("Complete su perfil se requiere telefono, foto y ubicación"), 402);
 
         $i=0;
         $feactures="[";
@@ -78,8 +79,8 @@ class ProductController extends Controller
                         "product_id" => $data["data"]["id"]
                     ]);
                 }
-                $user->balance = $user->balance - $util->value;
-                $user->save();
+               /* $user->balance = $user->balance - $util->value;
+                $user->save();*/
             }
         }
         return $response;
@@ -180,15 +181,46 @@ class ProductController extends Controller
 
     public function reported($id){
         $product = Product::find($id);
+        if (!$product)
+            return jsend_error(trans("El producto no se encuentra"), 404);
+
+        $user = Auth::user();
+
+        $reported = Reported::where([['user_id', $user->id], ['product_id', $id]])->first();
+        if ($reported)
+            return jsend_fail('', 402, trans("Ya reporto este producto."));
+
+        $reported = new Reported();
+        $reported->user_id = $user->id;
+        $reported->product_id = $id;
+        $reported->save();
+        $product->reported = $product->reported+1;
+        $product->save();
+        return jsend_success($product, 202, 'El producto se ha reportado con exito');
+
+
+    }
+
+
+    public function listReported(){
+        $products = Product::where([['reported', '>', 0], ['active', true]])->orderBy('reported', 'desc')->get();
+        return jsend_success($products, 202);
+    }
+
+
+    public function inactive($id){
+
+        $product = Product::find($id);
         if ($product==null)
             return jsend_error(trans("El producto no se encuentra"), 404);
 
-        $product->reported = true;
-        $product->save();
+        $product->active = false;
         $product->delete();
-        return jsend_success($product, 202, 'El producto se ha reportado con exito');
+        $product->save();
+        return jsend_success($product, 202);
 
     }
+
 
     public function listProductActive(){
         $products = Product::where('active', false)->get();
