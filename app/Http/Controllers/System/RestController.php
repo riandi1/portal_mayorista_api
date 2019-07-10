@@ -29,8 +29,8 @@ class RestController extends BaseController
             "password" => bcrypt($request->password),
             'activation_token'  => str_random(60),
         ]);
-        if (!$user->hasRole('master'))
-            $user->assignRole('master');
+        if (!$user->hasRole('seller'))
+            $user->assignRole('seller');
 
         $user->notify(new SignupActivate($user));
 

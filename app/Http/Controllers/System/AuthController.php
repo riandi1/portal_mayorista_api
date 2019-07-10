@@ -202,8 +202,8 @@ class AuthController extends BaseController
                 "social_id" => $idSocial,
             ]);
 
-            if (!$user->hasRole('master'))
-                $user->assignRole('master');
+            if (!$user->hasRole('seller'))
+                $user->assignRole('seller');
 
 
             $user->notify(new SignupActivate($user));
