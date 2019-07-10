@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->integer('reported')->nullable();
             $table->boolean('active')->default(true);
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('category_father_id');
             $table->unsignedInteger('category_id');
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();
@@ -39,6 +40,7 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('category_father_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

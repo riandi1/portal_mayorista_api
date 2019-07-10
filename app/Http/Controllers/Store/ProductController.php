@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Store\Category;
 use App\Models\Store\CategoryFeacture;
 use App\Models\Store\Favorite;
 use App\Models\Store\Product;
@@ -68,6 +69,10 @@ class ProductController extends Controller
         if ($rows!=$rows2)
             return jsend_fail('', 402, trans("Las características no corresponden."));
 
+
+        $categoryFather = Category::find($request->category_id);
+        $request->merge(['category_father_id' => $categoryFather->category_id]);
+
         $response = parent::store($request);
         $data = $response->getData(true);
         if ($data["status"] == "success") {
@@ -79,8 +84,8 @@ class ProductController extends Controller
                         "product_id" => $data["data"]["id"]
                     ]);
                 }
-               /* $user->balance = $user->balance - $util->value;
-                $user->save();*/
+               // $user->balance = $user->balance - $util->value;
+                //$user->save();
             }
         }
         return $response;
