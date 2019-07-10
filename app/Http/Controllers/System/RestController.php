@@ -9,8 +9,9 @@ use App\Models\System\User;
 use App\Notifications\SignupActivate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
 
-class RestController
+class RestController extends BaseController
 {
 
     public function storeUser(Request $request)
@@ -56,29 +57,76 @@ class RestController
     }
 
 
-    public function listProduct(){
-            // $products = Product::orderBy('web_positioning', 'DESC')->get();
+    public function listProduct(Request $request){
+        //Filter
+        $category = $request->category;
+        $category = ($category) ? ['products.category_id', '=', $category] : ['products.id', '!=', 0];
+        $location = $request->location;
+        $location = ($location) ? ['users.location', 'ILIKE', '%'.$location.'%'] : ['products.id', '!=', 0];
+        $minimum = $request->minimum;
+        $minimum = ($minimum) ? ['products.price', '>=', $minimum] : ['products.id', '!=', 0];
+        $maximum = $request->maximum;
+        $maximum = ($maximum) ? ['products.price', '<=', $maximum] : ['products.id', '!=', 0];
+        $published = $request->published;
+        $date =  date('Y-m-d', strtotime($published." days"));
+        $published = ($published) ? ['products.created_at', '>=', $date] : ['products.id', '!=', 0];
+        //advanced
+        $advanced = $request->advanced;
+        $advancedName = ($advanced) ? ['products.name', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
+        $advancedDescription = ($advanced) ? ['products.description', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
+        $advancedCategory = ($advanced) ? ['categories.name', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
+
+        $user_id = $request->user_id;
+        $user_id = ($user_id) ? $user_id : 0;
             $products = Product
-               /* ::leftJoin('favorites', 'products.id', '=', 'favorites.product_id')
-                ->where('favorites.user_id', 6)*/
-                //::join('users', 'user_id', '=', 'users.id')
-                ::leftJoin('favorites', function ($join) {
+                ::leftJoin('favorites', function ($join) use ($user_id) {
                      $join->on('products.id', '=', 'favorites.product_id')
-                  ->where('favorites.user_id', '=', 6   );
+                  ->where('favorites.user_id', '=',   $user_id);
                  })
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->join('users', 'products.user_id', '=', 'users.id')
                 ->select('products.*')
+                ->where([
+                    ['products.deleted_at', null],
+                    ['products.active', true],
+                    $category,
+                    $location,
+                    $minimum,
+                    $maximum,
+                    $published,
+
+                ])
+                ->where([
+                    $advancedName,
+                ])
+                ->orWhere([
+                    $advancedDescription,
+                ])
+                ->orWhere([
+                    $advancedCategory,
+                ])
                 ->orderBy('web_positioning', 'DESC')
                 ->orderBy('product_id', 'ASC')
-                ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
-                ->get();
+                ->orderBy('products.id' , 'DESC')
+                ->paginate(30);
+               // ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
+               // ->get();
 
               //  $products = json_encode($products, true);
-            return $products;
+             return jsend_success($products, 202);
     }
 
     public function product($id){
         $product = Product::with('productFeactures','user')->find($id);
+       $product->seen = $product->seen+1;
+        $product->save();
         return $product;
+    }
+
+
+    public function listProductTop(){
+        $products =  Product::orderBy('seen', 'DESC')->take(4)->get();
+        return jsend_success($products, 202);
     }
 
 }

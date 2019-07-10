@@ -147,6 +147,19 @@ class ProductController extends Controller
     }
 
 
+    public function show(Request $request, $id)
+    {
+
+        $response = parent::show($request, $id);
+        $data = $response->getData(true);
+        if ($data["status"] == "success") {
+            $product = Product::find($id);
+            $product->seen = $product->seen+1;
+            $product->save();
+        }
+        return $response;
+    }
+
 
     public function favorite($id){
         $user = Auth::user();

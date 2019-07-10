@@ -70,6 +70,7 @@ Route::group(['prefix' => 'rest'], function () {
     Route::get('categories', 'RestController@listCategory');
     Route::get('products', 'RestController@listProduct');
     Route::get('products/{id}', 'RestController@product');
+    Route::get('productstop', 'RestController@listProductTop');
 });
 
 
