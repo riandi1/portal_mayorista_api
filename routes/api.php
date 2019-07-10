@@ -71,6 +71,8 @@ Route::group(['prefix' => 'rest'], function () {
     Route::get('products', 'RestController@listProduct');
     Route::get('products/{id}', 'RestController@product');
     Route::get('productstop', 'RestController@listProductTop');
+    Route::get('productstop2', 'RestController@listProductTop2');
+    Route::get('productstop3', 'RestController@listProductTop3');
 });
 
 

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->permissionsToMaster();
+        $this->permissionsToSeller();
     }
 
     public function permissionsToMaster()
@@ -39,4 +40,24 @@ class DatabaseSeeder extends Seeder
             });
         }
     }
+
+
+
+    public function permissionsToSeller()
+    {
+        $seller_role = SpatieRole::query()->where('name', 'seller')->first();
+        if (!!$seller_role) {
+            Permission::all()->each(function ($permission) use ($seller_role) {
+                $permission_name = strtoupper($permission->name);
+                if ($permission_name !== 'ONE_ABOVE_ALL' && $permission_name != 'TICKET_WORKER') {
+                    $valid = strpos($permission_name, 'CATEGORY');
+                    if ($valid === false) {
+                        if (!$seller_role->hasPermissionTo($permission->name))
+                            $seller_role->givePermissionTo($permission->name);
+                    }
+                }
+            });
+        }
+    }
+
 }

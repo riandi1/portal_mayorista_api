@@ -290,7 +290,7 @@ class AuthController extends BaseController
             ], 404);
         }
         //return response()->json($passwordReset);
-        return redirect(env('APP_FRONT_URL', 'http://104.140.246.214').'/resetpassword/'.$token);
+        return redirect(env('APP_FRONT_URL', 'http://104.140.246.214').'/login/resetpassword/'.$token);
     }
 
 

@@ -22,7 +22,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Spatie\Permission\Models\Permission as SpatiePermission;
-
+use Spatie\Permission\Exceptions\UnauthorizedException;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -47,7 +47,12 @@ class Controller extends BaseController
      */
     public function index(Request $request)
     {
-        check_permission($this->model::prefix() . '_INDEX');
+        $_temp_user = Auth::user();
+        $modelValid = strtoupper($this->model::basename(). '_INDEX');
+        if (!$_temp_user->hasPermissionTo($modelValid))
+            throw UnauthorizedException::forPermissions([$modelValid]);
+        //check_permission($this->model::prefix() . '_INDEX');
+
 
         $sort = json_decode($request->get('sort', '{}'), true);
         $search = $request->get('search', null);
@@ -82,7 +87,11 @@ class Controller extends BaseController
      */
     public function show(Request $request, $id)
     {
-        check_permission($this->model::prefix() . '_SHOW');
+        $_temp_user = Auth::user();
+        $modelValid = strtoupper($this->model::basename(). '_SHOW');
+        if (!$_temp_user->hasPermissionTo($modelValid))
+            throw UnauthorizedException::forPermissions([$modelValid]);
+       // check_permission($this->model::prefix() . '_SHOW');
         $query = $this->model::withAll();
         $item = $query->findOrFail($id);
         return jsend_success($item);
@@ -96,7 +105,11 @@ class Controller extends BaseController
      */
     public function store(Request $request)
     {
-        check_permission($this->model::prefix() . '_STORE');
+        $_temp_user = Auth::user();
+        $modelValid = strtoupper($this->model::basename(). '_STORE');
+        if (!$_temp_user->hasPermissionTo($modelValid))
+            throw UnauthorizedException::forPermissions([$modelValid]);
+       // check_permission($this->model::prefix() . '_STORE');
         /** Rules model fields compounds*/
         if ($this->model::basename()=='Category'){
             if ($count = Category::where([['name', $request->name],['category_id', $request->category_id]])->count())
@@ -147,7 +160,11 @@ class Controller extends BaseController
      */
     public function update(Request $request, $id)
     {
-        check_permission($this->model::prefix() . '_UPDATE');
+        $_temp_user = Auth::user();
+        $modelValid = strtoupper($this->model::basename(). '_UPDATE');
+        if (!$_temp_user->hasPermissionTo($modelValid))
+            throw UnauthorizedException::forPermissions([$modelValid]);
+        //check_permission($this->model::prefix() . '_UPDATE');
         /** Rules model fields compounds*/
         if ($this->model::basename()=='Category'){
             if ($count = Category::where([['name', $request->name],['category_id', $request->category_id],['id', '<>', $id]])->count())
@@ -201,7 +218,11 @@ class Controller extends BaseController
      */
     public function destroy(Request $request, $id)
     {
-        check_permission($this->model::prefix() . '_DESTROY');
+        $_temp_user = Auth::user();
+        $modelValid = strtoupper($this->model::basename(). '_DESTROY');
+        if (!$_temp_user->hasPermissionTo($modelValid))
+            throw UnauthorizedException::forPermissions([$modelValid]);
+        //check_permission($this->model::prefix() . '_DESTROY');
         /** @var Model $record */
         $record = $this->model::findOrFail($id);
         Binnacle::write(

@@ -129,4 +129,14 @@ class RestController extends BaseController
         return jsend_success($products, 202);
     }
 
+    public function listProductTop2(){
+        $products = Product::orderBy('seen', 'DESC')->skip(4)->take(9)->get(); //get next 10 rows
+        return jsend_success($products, 202);
+    }
+
+    public function listProductTop3(){
+        $products = Product::orderBy('seen', 'DESC')->skip(13)->take(9)->get(); //get next 10 rows
+        return jsend_success($products, 202);
+    }
+
 }
