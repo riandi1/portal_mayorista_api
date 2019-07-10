@@ -105,6 +105,7 @@ Route::group([
         //Route::get('product/active', 'ProductController@listProductActive');
         //Route::post('product/{id}/active', 'ProductController@productActive');
         Route::put('product/positioning/{id}', 'ProductController@positioning');
+        Route::get('product/statistics/seen', 'ProductController@productSeen');
 
     });
 

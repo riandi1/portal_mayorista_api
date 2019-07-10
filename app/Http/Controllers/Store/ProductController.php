@@ -272,4 +272,12 @@ class ProductController extends Controller
         return jsend_success($product, 202, 'El producto se ha posicionado '.$request->positioning.' niveles arriba');
     }
 
+
+
+    public function productSeen(){
+        $user = Auth::user();
+        $products = Product::where('user_id', $user->id)->orderBy('seen', 'DESC')->get();
+        return jsend_success($products, 202);
+    }
+
 }

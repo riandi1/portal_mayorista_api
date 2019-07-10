@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('description')->nullable();
             $table->integer('web_positioning')->default(0);
             $table->integer('price');
-            $table->integer('seen')->nullable();
+            $table->integer('seen')->default(0);
             $table->boolean('negotiable_price')->default(false);
             $table->integer('reported')->nullable();
             $table->boolean('active')->default(true);
