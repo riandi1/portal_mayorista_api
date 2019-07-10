@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ValuationSent;
 use App\Models\System\Parameter;
 use App\Models\System\Valuation;
 use Spatie\Permission\Models\Role;
@@ -183,6 +184,7 @@ class UserController extends Controller
         $valuation->valuation = $request->valuation;
         $valuation->comment = $request->comment;
         $valuation->save();
+        broadcast(new ValuationSent($userValuation, $valuation))->toOthers();
         return jsend_success($valuation, 202);
     }
 
