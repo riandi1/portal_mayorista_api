@@ -32,8 +32,8 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
             $user_created = User::where('email', '=', "$role_name.user@platform.com")->first();
             if (!$user_created)
                 $user_created = User::updateOrCreate([
-                    "email" => "$role_name.user@platform.com",
-                    "password" => bcrypt("$role_name.pass"),
+                    "email" => "$role_name.user@gmail.com",
+                    "password" => bcrypt("$role_name"),
                     'activation_token' => 'xxxxxxxx',
                     'active' => true
                 ]);
