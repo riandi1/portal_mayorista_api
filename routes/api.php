@@ -69,6 +69,7 @@ Route::group(['prefix' => 'rest'], function () {
     Route::get('signup/activate/{token}', 'RestController@signupActivate');
     Route::get('categories', 'RestController@listCategory');
     Route::get('products', 'RestController@listProduct');
+    Route::get('productstest', 'RestController@listProductTest');
     Route::get('products/{id}', 'RestController@product');
     Route::get('productstop', 'RestController@listProductTop');
     Route::get('productstop2', 'RestController@listProductTop2');

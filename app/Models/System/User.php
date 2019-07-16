@@ -122,6 +122,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Conversation::class, 'user_receiver_id', 'id');
     }
 
+    public function messages(){
+        return $this->hasMany(Message::class, 'user_sender_id', 'id');
+    }
+
     public  function recharges(): HasMany{
         return $this->hasMany(UserRecharge::class, 'user_id', 'id');
     }

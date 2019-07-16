@@ -3,21 +3,21 @@
 namespace App\Models\System;
 
 use App\Models\Model;
-use App\Models\System\User;
+
 
 class Message extends Model
 {
 
-    protected $fillable = ['sender_id', 'message'];
+    protected $fillable = ['user_sender_id', 'message', 'conversation_id'];
     //protected $appends = ['is_sender'];
-    protected $relationships = ['conversation', 'sender'];
+    protected $relationships = ['conversation', 'userSender'];
 
     public function conversation()
     {
         return $this->belongsTo(Conversation::class);
     }
 
-    public function sender()
+    public function userSender()
     {
         return $this->belongsTo(User::class);
     }

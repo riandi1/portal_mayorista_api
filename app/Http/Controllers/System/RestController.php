@@ -10,6 +10,7 @@ use App\Notifications\SignupActivate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
+use function Sodium\add;
 
 class RestController extends BaseController
 {
@@ -52,13 +53,15 @@ class RestController extends BaseController
 
     public function listCategory(){
         //$categories = Category::with('subCategories')->find(1);
-        $categories = Category::with('subCategories')->get();
+        $categories = Category::with('subCategories')->where('category_id' ,null)->get();
         return $categories;
     }
 
 
     public function listProduct(Request $request){
         //Filter
+        $categoryFather = $request->categoryFather;
+        $categoryFather = ($categoryFather) ? ['products.category_father_id', '=', $categoryFather] : ['products.id', '!=', 0];
         $category = $request->category;
         $category = ($category) ? ['products.category_id', '=', $category] : ['products.id', '!=', 0];
         $location = $request->location;
@@ -72,49 +75,68 @@ class RestController extends BaseController
         $published = ($published) ? ['products.created_at', '>=', $date] : ['products.id', '!=', 0];
         //advanced
         $advanced = $request->advanced;
-        $advancedName = ($advanced) ? ['products.name', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
-        $advancedDescription = ($advanced) ? ['products.description', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
-        $advancedCategory = ($advanced) ? ['categories.name', 'ILIKE', '%'.$advanced.'%'] : ['products.id', '!=', 0];
-
         $user_id = $request->user_id;
         $user_id = ($user_id) ? $user_id : 0;
-            $products = Product
-                ::leftJoin('favorites', function ($join) use ($user_id) {
-                     $join->on('products.id', '=', 'favorites.product_id')
-                  ->where('favorites.user_id', '=',   $user_id);
-                 })
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->join('users', 'products.user_id', '=', 'users.id')
-                ->select('products.*')
-                ->where([
-                    ['products.deleted_at', null],
-                    ['products.active', true],
-                    $category,
-                    $location,
-                    $minimum,
-                    $maximum,
-                    $published,
 
-                ])
-                ->where([
-                    $advancedName,
-                ])
-                ->orWhere([
-                    $advancedDescription,
-                ])
-                ->orWhere([
-                    $advancedCategory,
-                ])
-                ->orderBy('web_positioning', 'DESC')
-                ->orderBy('product_id', 'ASC')
-                ->orderBy('products.id' , 'DESC')
-                ->paginate(30);
-               // ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
-               // ->get();
+        $advancedArray = explode(" ", $advanced);
+        $products = Product
+            ::leftJoin('favorites', function ($join) use ($user_id) {
+                $join->on('products.id', '=', 'favorites.product_id')
+                    ->where('favorites.user_id', '=',   1);
+            })
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('users', 'products.user_id', '=', 'users.id')
+            ->select('products.*')
+            ->where([
+                ['products.deleted_at', null],
+                ['products.active', true],
+                $categoryFather,
+                $category,
+                $location,
+                $minimum,
+                $maximum,
+                $published,
+                $categoryFather,
+            ])
 
-              //  $products = json_encode($products, true);
-             return jsend_success($products, 202);
+            ->Where(function ($query) use($advancedArray) {
+                for ($i = 0; $i < count($advancedArray); $i++){
+                    $query->where('products.name', 'ILIKE', '%'.$advancedArray[$i] .'%')
+                        ->orWhere('products.description', 'ILIKE', '%'.$advancedArray[$i].'%')
+                        ->orWhere('categories.name', 'ILIKE', '%'.$advancedArray[$i].'%');
+                }
+            })
+
+            ->orderBy('web_positioning', 'DESC')
+            ->orderBy('product_id', 'ASC')
+            ->orderBy('products.id' , 'DESC')
+            ->paginate(28);
+        // ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
+        // ->get();
+
+        $priceMax = Product::max('price');
+        /*$filter = [
+            'categoryFather' => $request->categoryFather,
+            'category' => $request->category,
+            'location' => $request->location,
+            'minimum' => $request->minimum,
+            'maximum' => $request->maximum,
+            'published' => $request->published,
+            'advanced' => $request->advanced,
+            'user_id' => $request->user_id,
+        ];*/
+
+
+
+        $result = [ 'data' => $products, 'priceMax' => $priceMax ];
+        return jsend_success($result, 202);
     }
+
+
+
+
+
+
 
     public function product($id){
         $product = Product::with('productFeactures','user')->find($id);
@@ -134,9 +156,9 @@ class RestController extends BaseController
         return jsend_success($products, 202);
     }
 
-    public function listProductTop3(){
-        $products = Product::orderBy('seen', 'DESC')->skip(13)->take(9)->get(); //get next 10 rows
-        return jsend_success($products, 202);
+    public function listProductTop3()
+    {
+           $products = Product::orderBy('seen', 'DESC')->skip(13)->take(9)->get(); //get next 10 rows
+           return jsend_success($products, 202);
     }
-
 }

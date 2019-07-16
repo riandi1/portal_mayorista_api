@@ -17,14 +17,14 @@ class ChatController   extends BaseController
     public function indexConversation(){
         $user = Auth::user();
       //  $request->request->add(['wheres' => '[{"column": "user_sender_id", "op":"=","value":"'.$user->id.'"}]']);
-        $conversations = Conversation::with('product', 'userSender', 'userReceiver')->where('user_sender_id', $user->id)->get();
+        $conversations = Conversation::with('product', 'userSender', 'userReceiver')->where('user_sender_id', $user->id)->orWhere('user_receiver_id', $user->id)->get();
         return jsend_success($conversations, 202);
     }
 
     public function showConversation($id){
         $user = Auth::user();
-        $conversation = Conversation::with('product', 'messages', 'userSender', 'userReceiver')->find($id);
-        return jsend_success($conversation, 202);
+        $messages = Message::with('userSender')->where('conversation_id', $id)->get();
+        return jsend_success($messages, 202);
     }
 
     public function deleteConversation($id){
@@ -36,20 +36,28 @@ class ChatController   extends BaseController
     public function storeMessage(Request $request,$id){
         $user_seder = Auth::user();
         $product = Product::find($id);
-        if($product==null)
-            return jsend_fail('', 402, trans("Product not found."));
+        if(!$product)
+            return jsend_error(trans("El producto no se encuentra"), 404);
 
-        $user_receiver = User::find($product->user_id);
+        $user_receiver = User::find($request->user_receiver_id);
+        if(!$user_receiver)
+            return jsend_error(trans("El usuario no se encuentra"), 404);
 
         $conversation = Conversation::where([
             ['product_id', $product->id],
             ['user_sender_id', $user_seder->id],
             ['user_receiver_id', $user_receiver->id]
-        ])->first();
+        ])
+        ->orWhere([
+            ['product_id', $product->id],
+            ['user_receiver_id', $user_seder->id],
+            ['user_sender_id', $user_receiver->id]
+        ])
+        ->first();
 
 
 
-        if($conversation==null){
+        if(!$conversation){
             $conversation = new Conversation();
             $conversation->product_id =  $product->id;
             $conversation->user_sender_id =  $user_seder->id;
@@ -65,8 +73,8 @@ class ChatController   extends BaseController
         $message->save();
 
 
-
-        event(new MessageSent($user_seder, $message));
+        broadcast(new MessageSent($user_receiver, $user_seder, $message))->toOthers();
+       // event(new MessageSent($user_seder, $message))->toOthers();
 
         return ['status' => 'Message Sent!'];
     }

@@ -25,6 +25,6 @@ class ChatListener
      */
     public function handle($event)
     {
-        app('log')->info($event->user.$event->message);
+        app('log')->info($event->user_seder.$event->message);
     }
 }
