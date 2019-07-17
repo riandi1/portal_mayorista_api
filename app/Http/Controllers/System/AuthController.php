@@ -204,6 +204,10 @@ class AuthController extends BaseController
 
             if (!$user->hasRole('seller'))
                 $user->assignRole('seller');
+            if (!$user->hasDirectPermission('CATEGORY_INDEX'))
+                $user->givePermissionTo('CATEGORY_INDEX');
+            if (!$user->hasDirectPermission('CATEGORYFEACTURE_INDEX'))
+                $user->givePermissionTo('CATEGORYFEACTURE_INDEX');
 
 
             $user->notify(new SignupActivate($user));

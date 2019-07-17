@@ -107,7 +107,7 @@ class ProductController extends Controller
                     $feactures .= '{"key":"' . $key . '","value":"' . $value . '"},';
                     $request->request->remove($key);
                 }
-                if ($key == "description") $i++;
+                if ($key == "negotiable_price") $i++;
             }
 
             $feactures = substr($feactures, 0, -1);

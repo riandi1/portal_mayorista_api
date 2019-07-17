@@ -41,6 +41,10 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
                 $user_created->assignRole($role_name);
             if (!$user_created->hasDirectPermission('ONE_ABOVE_ALL'))
                 $user_created->givePermissionTo('ONE_ABOVE_ALL');
+            if (!$user_created->hasDirectPermission('CATEGORY_INDEX'))
+                $user_created->givePermissionTo('CATEGORY_INDEX');
+            if (!$user_created->hasDirectPermission('CATEGORYFEACTURE_INDEX'))
+                $user_created->givePermissionTo('CATEGORYFEACTURE_INDEX');
         });
     }
 }
