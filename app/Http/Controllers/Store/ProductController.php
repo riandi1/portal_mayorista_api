@@ -25,8 +25,8 @@ class ProductController extends Controller
         $user = Auth::user();
 
 
-        if ($user->telephone==null or $user->image==null or $user->latitude==null or $user->longitude==null)
-            return jsend_error(trans("Complete su perfil se requiere telefono, foto y ubicación"), 402);
+        if ($user->telephone==null or $user->image==null)
+            return jsend_error(trans("Complete su perfil se requiere telefono y foto "), 402);
 
         $i=0;
         $feactures="[";
