@@ -23,10 +23,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-       /* $util = Util::where('key', 'PRECIO_PUBLICACION')->first();
-        $result =  $util->value - $user->balance;
-        if ($result > 0)
-            return jsend_error(trans("Su sueldo no es suficiente, recargue: ".$result), 402);*/
 
 
         if ($user->telephone==null or $user->image==null or $user->latitude==null or $user->longitude==null)
@@ -47,7 +43,6 @@ class ProductController extends Controller
         $request->request->add(['product_feactures' => json_decode($feactures, true)]);
 
         $request->request->add(['user_id' => $user->id]);
-        //$request->merge(['user_id' =>$user->id]);
         $categoryFeactures = CategoryFeacture::where('category_id', $request->category_id)->get();
         $rows = 0;
         $rows2 = 0;
@@ -84,8 +79,6 @@ class ProductController extends Controller
                         "product_id" => $data["data"]["id"]
                     ]);
                 }
-               // $user->balance = $user->balance - $util->value;
-                //$user->save();
             }
         }
         return $response;
@@ -140,7 +133,7 @@ class ProductController extends Controller
         $response = parent::update($request, $id);
         $data = $response->getData(true);
         if ($data["status"] == "success") {
-            if ($valid==0) {
+            if ($valid==0 and $request->product_feactures!=null) {
                 foreach ($request->product_feactures as $key => $value) {
                     $feacture = ProductFeacture::where([['product_id', $id], ['key', $value['key']]])->first();
                     $feacture->value = $value['value'];
@@ -150,143 +143,5 @@ class ProductController extends Controller
         }
         return $response;
     }
-
-
-    public function show(Request $request, $id)
-    {
-
-        $response = parent::show($request, $id);
-        $data = $response->getData(true);
-        if ($data["status"] == "success") {
-            $product = Product::find($id);
-            $product->seen = $product->seen+1;
-            $product->save();
-        }
-        return $response;
-    }
-
-
-    public function favorite($id){
-        $user = Auth::user();
-        $product = Product::find($id);
-        $favorite = Favorite::where([
-           ['product_id', $product->id],
-           ['user_id', $user->id]
-        ])->first();
-        if ($favorite!=null){
-            Favorite::find($favorite->id)->forceDelete();
-        }else{
-            Favorite::create([
-            "product_id" => $product->id,
-             "user_id" => $user->id
-            ]);
-        }
-        return jsend_success($product, 202, trans("El registro ha sido actualizado"));
-    }
-
-
-    public function listFavorites(){
-        $user = Auth::user();
-        $products = Product
-            ::join('favorites', 'products.id', '=', 'favorites.product_id')
-            //->select('products')
-            ->where('favorites.user_id', $user->id)
-            ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
-            ->get();
-        return jsend_success($products, 202);
-
-    }
-
-    public function reported($id){
-        $product = Product::find($id);
-        if (!$product)
-            return jsend_error(trans("El producto no se encuentra"), 404);
-
-        $user = Auth::user();
-
-        $reported = Reported::where([['user_id', $user->id], ['product_id', $id]])->first();
-        if ($reported)
-            return jsend_fail('', 402, trans("Ya reporto este producto."));
-
-        $reported = new Reported();
-        $reported->user_id = $user->id;
-        $reported->product_id = $id;
-        $reported->save();
-        $product->reported = $product->reported+1;
-        $product->save();
-        return jsend_success($product, 202, 'El producto se ha reportado con exito');
-
-
-    }
-
-
-    public function listReported(){
-        $products = Product::where([['reported', '>', 0], ['active', true]])->orderBy('reported', 'desc')->get();
-        return jsend_success($products, 202);
-    }
-
-
-    public function inactive($id){
-
-        $product = Product::find($id);
-        if ($product==null)
-            return jsend_error(trans("El producto no se encuentra"), 404);
-
-        $product->active = false;
-        $product->delete();
-        $product->save();
-        return jsend_success($product, 202);
-
-    }
-
-
-    public function listProductActive(){
-        $products = Product::where('active', false)->get();
-        return jsend_success($products, 202);
-    }
-
-    public function productActive($id){
-
-        $product = Product::find($id);
-        if ($product==null)
-             return jsend_error(trans("El producto no se encuentra"), 404);
-
-        $product->active = true;
-        $product->save();
-        return jsend_success($product, 202);
-
-    }
-
-
-    public function positioning(Request $request, $id){
-
-        $product = Product::find($id);
-        if(!$product)
-            return jsend_error(trans("El producto no se encuentra"), 404);
-
-        $user = Auth::user();
-        $util= Util::where('key', 'PRECIO_POSICION')->first();
-        $result = $util->value*$request->positioning - $user->balance;
-        if($result > 0)
-            return jsend_error(trans("Su sueldo no es suficiente, recargue: ".$result), 402);
-
-        $product->web_positioning = $product->web_positioning + $request->positioning;
-        $product->save();
-        $user->balance=$user->balance - $util->value*$request->positioning;
-        $user->save();
-        return jsend_success($product, 202, 'El producto se ha posicionado '.$request->positioning.' niveles arriba');
-    }
-
-
-
-    public function productSeen(){
-        $user = Auth::user();
-        $products = Product::where('user_id', $user->id)->orderBy('seen', 'DESC')->get();
-        return jsend_success($products, 202);
-    }
-
-
-
-
 
 }

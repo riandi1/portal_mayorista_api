@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         Notifiable,
         HasRoles;
 
-    public $relationships = ['roles', 'permissions','recharges','products'];
+    public $relationships = ['roles', 'permissions','products'];
 
     protected $dates = ['deleted_at'];
 
@@ -92,10 +92,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
 
 
-    public function created_comments()
-    {
-        return $this->hasMany(Comment::class, 'user_id', 'id');
-    }
 
     public function userPlans(): HasMany
     {
@@ -108,26 +104,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
 
-    public function favorites(): HasMany
-    {
-        return $this->hasMany(Favorite::class, 'user_id', 'id');
-    }
 
-    public function conversationSender(){
-        return $this->hasMany(Conversation::class, 'user_sender_id', 'id');
-    }
-
-
-    public function conversationReceiver(){
-        return $this->hasMany(Conversation::class, 'user_receiver_id', 'id');
-    }
-
-    public function messages(){
-        return $this->hasMany(Message::class, 'user_sender_id', 'id');
-    }
-
-    public  function recharges(): HasMany{
-        return $this->hasMany(UserRecharge::class, 'user_id', 'id');
-    }
 
 }

@@ -15,10 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         app()['cache']->forget('spatie.permission.cache');
-        //$this->call(CountrySeeder::class);
-       // $this->call(StateSeeder::class);
         $this->call(PlanTableSeeder::class);
-        $this->call(UtilTableSeeder::class);
         $this->call(ParametersSeeder::class);
         $this->call(PermissionsSeeder::class);
         $this->call(RolesSeeder::class);

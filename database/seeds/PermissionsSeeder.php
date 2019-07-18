@@ -43,14 +43,8 @@ class PermissionsSeeder extends Seeder
         $this->modelPermissions(\App\Models\System\Binnacle::class, [], [
             'OVER_SCOPE' => 'Show all binnacle'
         ]);
-        $this->modelPermissions(\App\Models\System\Comment::class);
-        $this->modelPermissions(\App\Models\System\Email::class);
         $this->modelPermissions(\App\Models\Store\Product::class);
-        $this->modelPermissions(\App\Models\Store\ProductMovement::class, [], [
-            'INPUT' => trans("messages.inventory.permissions.input"),
-            'OUTPUT' => trans("messages.inventory.permissions.output"),
-            'MASS' => trans("messages.inventory.permissions.mass")
-        ]);
+
         $this->modelPermissions(\App\Models\Cms\Page::class);
         $this->modelPermissions(\App\Models\Cms\PageVar::class);
         $this->modelPermissions(\App\Models\System\CustomField::class);

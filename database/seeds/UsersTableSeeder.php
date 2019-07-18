@@ -29,7 +29,7 @@ class UsersTableSeeder extends \Illuminate\Database\Seeder
         Role::all()->each(function (Role $role) {
             $role_name = $role->name;
             // @var User $user_created
-            $user_created = User::where('email', '=', "$role_name.user@platform.com")->first();
+            $user_created = User::where('email', '=', "$role_name.user@gmail.com")->first();
             if (!$user_created)
                 $user_created = User::updateOrCreate([
                     "email" => "$role_name.user@gmail.com",

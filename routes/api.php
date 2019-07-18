@@ -28,51 +28,23 @@ Route::group([
         Route::delete('logout', 'AuthController@logout')->name('auth.logout');
         Route::put('change', 'AuthController@change');
         Route::get('validate', 'AuthController@validate')->name('auth.validate');
-        Route::get('notifications', 'AuthController@notifications')->name('auth.notifications');
-        Route::put('notifications/read', 'AuthController@readNotifications')->name('auth.read_notifications');
-        Route::put('fcm/{token}', 'AuthController@setFCM')->name('auth.set_fcm');
-        Route::post('/pusher', function (\Illuminate\Http\Request $request) {
-            $pusher = new Pusher(
-                config('broadcasting.connections.pusher.key'),
-                config('broadcasting.connections.pusher.secret'),
-                config('broadcasting.connections.pusher.app_id'),
-                config('broadcasting.connections.pusher.options')
-            );
-            return $pusher->socket_auth($request->get('channel_name'), $request->get('socket_id'));
-        });
     });
 });
 
 // Password
 Route::group(['prefix' => 'password'], function () {
-    Route::post('create', 'AuthController@create');
+    Route::post('restore', 'AuthController@restore');
     Route::get('find/{token}', 'AuthController@find');
     Route::post('reset', 'AuthController@reset');
 });
 
 
-
-
-Route::group(['middleware' => ['web']], function () {
-    //Socialite
-    Route::get('/redirect/{provider}', 'AuthController@redirect');
-    Route::get('/callback/{provider}', 'AuthController@callback');
-
-});
-
-
-// Users
-
 // Rest
 Route::group(['prefix' => 'rest'], function () {
     Route::post('users', 'RestController@storeUser');
-    Route::get('signup/activate/{token}', 'RestController@signupActivate');
     Route::get('categories', 'RestController@listCategory');
     Route::get('products', 'RestController@listProduct');
-    Route::get('products/{id}/{user}', 'RestController@product');
-    Route::get('productstop', 'RestController@listProductTop');
-    Route::get('productstop2', 'RestController@listProductTop2');
-    Route::get('productstop3', 'RestController@listProductTop3');
+    Route::get('products/{id}', 'RestController@product');
 });
 
 
@@ -83,12 +55,6 @@ Route::group([
 
     // Users
     Route::apiResource('users', 'UserController');
-    Route::post('users/{user_id}/message', 'UserController@message');
-    Route::put('user/{id}/image', 'UserController@updateImage')->name('user.image');
-    Route::put('user/{id}/roles', 'UserController@updateRoles')->name('user.roles');
-    Route::post('user/{id}/valuation', 'UserController@valuation');
-    Route::get('user/{id}/valuation', 'UserController@valuationUser');
-    Route::get('userinfo', 'UserController@listUserInfo');
 
 
     Route::apiResource('recharges', 'UserRechargeController');
@@ -98,22 +64,7 @@ Route::group([
         Route::apiResource('categories', 'CategoryController');
         Route::apiResource('categoryFeactures', 'CategoryFeactureController');
         Route::apiResource('products', 'ProductController');
-        Route::post('product/favorites/{product}', 'ProductController@favorite');
-        Route::delete('product/favorites/{product}', 'ProductController@deleteFavorite');
-        Route::get('product/favorites', 'ProductController@listFavorites');
-        Route::delete('product/{id}/reported', 'ProductController@reported');
-        Route::get('product/reported', 'ProductController@listReported');
-        Route::put('product/{id}/inactive', 'ProductController@inactive');
-        //Route::get('product/active', 'ProductController@listProductActive');
-        //Route::post('product/{id}/active', 'ProductController@productActive');
-        Route::put('product/positioning/{id}', 'ProductController@positioning');
-        Route::get('product/statistics/seen', 'ProductController@productSeen');
-
     });
-
-    Route::put('/smsconfirmation', 'SmsController@sendSms');
-    Route::post('/smsconfirmation', 'SmsController@active');
-
 
     // Roles
     Route::apiResource('roles', 'RoleController');
@@ -134,14 +85,6 @@ Route::group([
     Route::apiResource('tags', 'TagController');
     Route::apiResource('assignments', 'TagAssignmentController');
 
-    // Comments
-    Route::get('comments/{id}', 'CommentController@index');
-    Route::post('comments/{id}', 'CommentController@created');
-    Route::delete('comments/{id}', 'CommentController@delete');
-
-    // Mails
-    Route::apiResource('emails', 'EmailController');
-
 
     // Pages
     Route::apiResource('pages', 'PageController');
@@ -153,16 +96,6 @@ Route::group([
     Route::apiResource('custom_fields', 'CustomFieldController');
     Route::get('custom_fields_for/{resource}', 'CustomFieldController@getFields');
 
-    Route::group(['prefix' => 'chat'], function () {
-        Route::get('conversations', 'ChatController@indexConversation');
-        Route::get('conversations/{id}', 'ChatController@showConversation');
-        Route::delete('conversations/{id}', 'ChatController@deleteConversation');
-        Route::post('messages/{id}', 'ChatController@storeMessage');
-        Route::delete('messages/{id}', 'ChatController@deleteMessage');
-    });
 
 });
 
-Route::post('paypal-transaction-complete' , function () {
-    return 'hello';
-});
