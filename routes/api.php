@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\main_bannerController;
 use App\Models\System\User;
 use Pusher\Pusher;
 
@@ -46,6 +47,9 @@ Route::group(['prefix' => 'rest'], function () {
     Route::get('products', 'RestController@listProduct');
     Route::get('products/{id}', 'RestController@product');
 });
+
+//endpoints
+Route::post('main_banner', 'API\main_bannerController@store');
 
 
 // PANEL ROUTES
