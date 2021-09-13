@@ -83,13 +83,14 @@ class RestController extends BaseController
                 $categoryFather,
             ]);
 
-
-        for ($i = 0; $i < count($advancedArray); $i++) {
-            $products->Where(function ($query) use ($advancedArray, $i) {
-                $query->where('products.name', 'ILIKE', '%' . $advancedArray[$i] . '%')
+        if($advanced){
+            for ($i = 0; $i < count($advancedArray); $i++) {
+                $products->Where(function ($query) use ($advancedArray, $i) {
+                    $query->where('products.name', 'ILIKE', '%' . $advancedArray[$i] . '%')
                     ->orWhere('products.description', 'ILIKE', '%' . $advancedArray[$i] . '%')
                     ->orWhere('categories.name', 'ILIKE', '%' . $advancedArray[$i] . '%');
-            });
+                });
+            }
         }
 
         $products->orderBy('web_positioning', 'DESC')
