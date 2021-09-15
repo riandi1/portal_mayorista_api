@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBinnaclesTable extends Migration
+class CreateMainBannersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class CreateBinnaclesTable extends Migration
      */
     public function up()
     {
-        Schema::create('binnacles', function (Blueprint $table) {
+        Schema::create('main_banners', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('action');
-            $table->string('title')->nullable();
-            $table->string('message')->nullable();
-            $table->nullableMorphs('target');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->softDeletes();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -32,6 +27,6 @@ class CreateBinnaclesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('binnacles');
+        Schema::dropIfExists('main_banners');
     }
 }
