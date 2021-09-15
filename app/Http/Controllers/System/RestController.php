@@ -8,6 +8,8 @@ use App\Models\Store\Product;
 use App\Models\System\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class RestController extends BaseController
 {
@@ -43,6 +45,18 @@ class RestController extends BaseController
         return $categories;
     }
 
+    //this function is for looking images in disk public/assets/main_b
+    public function mainBanner()
+    {
+        $file = Storage::disk('mainB')->allFiles();
+        return Response::json($file,200);
+    }
+
+    public function footerBanner()
+    {
+        $file = Storage::disk('footerB')->allFiles();
+        return Response::json($file,200);
+    }
 
     public function listProduct(Request $request)
     {
@@ -83,13 +97,14 @@ class RestController extends BaseController
                 $categoryFather,
             ]);
 
-
-        for ($i = 0; $i < count($advancedArray); $i++) {
-            $products->Where(function ($query) use ($advancedArray, $i) {
-                $query->where('products.name', 'ILIKE', '%' . $advancedArray[$i] . '%')
+        if($advanced){
+            for ($i = 0; $i < count($advancedArray); $i++) {
+                $products->Where(function ($query) use ($advancedArray, $i) {
+                    $query->where('products.name', 'ILIKE', '%' . $advancedArray[$i] . '%')
                     ->orWhere('products.description', 'ILIKE', '%' . $advancedArray[$i] . '%')
                     ->orWhere('categories.name', 'ILIKE', '%' . $advancedArray[$i] . '%');
-            });
+                });
+            }
         }
 
         $products->orderBy('web_positioning', 'DESC')

@@ -43,9 +43,12 @@ Route::group(['prefix' => 'password'], function () {
 Route::group(['prefix' => 'rest'], function () {
     Route::post('users', 'RestController@storeUser');
     Route::get('categories', 'RestController@listCategory');
+    Route::get('main', 'RestController@mainBanner');
+    Route::get('footer', 'RestController@footerBanner');
     Route::get('products', 'RestController@listProduct');
     Route::get('products/{id}', 'RestController@product');
 });
+
 
 
 // PANEL ROUTES

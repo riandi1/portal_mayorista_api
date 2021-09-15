@@ -55,6 +55,19 @@ return [
             'visibility' => 'public',
         ],
 
+        'mainB' => [
+            'driver' => 'local',
+            'root' => public_path('assets/main_b'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'footerB' => [
+            'driver' => 'local',
+            'root' => public_path('assets/footer_b'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
